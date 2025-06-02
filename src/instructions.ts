@@ -57,6 +57,9 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "call", summary: "Calls a procedure, pushing the return address." },
   { name: "ret", summary: "Returns from a procedure." },
   { name: "cdq", summary: "Sign-extends EAX into EDX:EAX (used before idiv)." },
+  { name: "cbw", summary: "Sign-extends AL into AX." },
+  { name: "cwd", summary: "Sign-extends AX into DX:AX." },
+  { name: "cwde", summary: "Sign-extends AX into EAX." },
   { name: "nop", summary: "No operation." },
   { name: "int", summary: "Software interrupt." },
 ]
