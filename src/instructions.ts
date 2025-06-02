@@ -15,6 +15,8 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "pop", summary: "Pops the top value off the stack into the operand." },
   { name: "add", summary: "Adds the source to the destination. `add dest, src`" },
   { name: "sub", summary: "Subtracts the source from the destination. `sub dest, src`" },
+  { name: "adc", summary: "Adds the source plus the carry flag to the destination." },
+  { name: "sbb", summary: "Subtracts the source and the carry flag from the destination." },
   { name: "inc", summary: "Increments the operand by one." },
   { name: "dec", summary: "Decrements the operand by one." },
   { name: "mul", summary: "Unsigned multiply of EAX by the operand (result in EDX:EAX)." },
