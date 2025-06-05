@@ -66,6 +66,13 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "cwde", summary: "Sign-extends AX into EAX." },
   { name: "nop", summary: "No operation." },
   { name: "int", summary: "Software interrupt." },
+  { name: "clc", summary: "Clears the carry flag." },
+  { name: "stc", summary: "Sets the carry flag." },
+  { name: "cmc", summary: "Complements (inverts) the carry flag." },
+  { name: "cld", summary: "Clears the direction flag, so string operations move forward." },
+  { name: "std", summary: "Sets the direction flag, so string operations move backward." },
+  { name: "cli", summary: "Clears the interrupt flag (disables maskable interrupts)." },
+  { name: "sti", summary: "Sets the interrupt flag (enables maskable interrupts)." },
 ]
 
 export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
