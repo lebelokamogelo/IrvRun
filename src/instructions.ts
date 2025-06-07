@@ -38,6 +38,8 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "bts", summary: "Copies the selected bit into the carry flag, then sets it." },
   { name: "btr", summary: "Copies the selected bit into the carry flag, then clears it." },
   { name: "btc", summary: "Copies the selected bit into the carry flag, then inverts it." },
+  { name: "bsf", summary: "Scans from bit 0 for the first set bit and stores its index." },
+  { name: "bsr", summary: "Scans from the highest bit for the first set bit and stores its index." },
   { name: "shl", summary: "Shifts bits left, filling with zeros (multiplies by 2 each shift)." },
   { name: "shr", summary: "Shifts bits right, filling with zeros (unsigned divide by 2)." },
   { name: "sal", summary: "Arithmetic shift left (same as shl)." },
