@@ -44,6 +44,8 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "shr", summary: "Shifts bits right, filling with zeros (unsigned divide by 2)." },
   { name: "sal", summary: "Arithmetic shift left (same as shl)." },
   { name: "sar", summary: "Arithmetic shift right, preserving the sign bit." },
+  { name: "shld", summary: "Shifts the destination left, filling from the high bits of the source." },
+  { name: "shrd", summary: "Shifts the destination right, filling from the low bits of the source." },
   { name: "rol", summary: "Rotates bits left." },
   { name: "ror", summary: "Rotates bits right." },
   { name: "jmp", summary: "Unconditional jump to a label." },
