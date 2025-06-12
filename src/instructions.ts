@@ -48,6 +48,8 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "shrd", summary: "Shifts the destination right, filling from the low bits of the source." },
   { name: "rol", summary: "Rotates bits left." },
   { name: "ror", summary: "Rotates bits right." },
+  { name: "rcl", summary: "Rotates bits left through the carry flag." },
+  { name: "rcr", summary: "Rotates bits right through the carry flag." },
   { name: "jmp", summary: "Unconditional jump to a label." },
   { name: "je", summary: "Jump if equal (ZF = 1). Same as jz." },
   { name: "jne", summary: "Jump if not equal (ZF = 0). Same as jnz." },
