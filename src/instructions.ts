@@ -92,6 +92,14 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "std", summary: "Sets the direction flag, so string operations move backward." },
   { name: "cli", summary: "Clears the interrupt flag (disables maskable interrupts)." },
   { name: "sti", summary: "Sets the interrupt flag (enables maskable interrupts)." },
+  { name: "sete", summary: "Sets the byte operand to 1 if equal (ZF = 1), otherwise 0." },
+  { name: "setne", summary: "Sets the byte operand to 1 if not equal (ZF = 0), otherwise 0." },
+  { name: "setg", summary: "Sets the byte operand to 1 if greater (signed), otherwise 0." },
+  { name: "setge", summary: "Sets the byte operand to 1 if greater or equal (signed)." },
+  { name: "setl", summary: "Sets the byte operand to 1 if less (signed), otherwise 0." },
+  { name: "setle", summary: "Sets the byte operand to 1 if less or equal (signed)." },
+  { name: "seta", summary: "Sets the byte operand to 1 if above (unsigned), otherwise 0." },
+  { name: "setb", summary: "Sets the byte operand to 1 if below (unsigned), otherwise 0." },
 ]
 
 export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
