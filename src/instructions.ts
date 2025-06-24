@@ -106,6 +106,21 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "setle", summary: "Sets the byte operand to 1 if less or equal (signed)." },
   { name: "seta", summary: "Sets the byte operand to 1 if above (unsigned), otherwise 0." },
   { name: "setb", summary: "Sets the byte operand to 1 if below (unsigned), otherwise 0." },
+  { name: "movsb", summary: "Copies a byte from [ESI] to [EDI] and advances both." },
+  { name: "movsw", summary: "Copies a word from [ESI] to [EDI] and advances both." },
+  { name: "movsd", summary: "Copies a doubleword from [ESI] to [EDI] and advances both." },
+  { name: "stosb", summary: "Stores AL at [EDI] and advances EDI." },
+  { name: "stosw", summary: "Stores AX at [EDI] and advances EDI." },
+  { name: "stosd", summary: "Stores EAX at [EDI] and advances EDI." },
+  { name: "lodsb", summary: "Loads the byte at [ESI] into AL and advances ESI." },
+  { name: "lodsw", summary: "Loads the word at [ESI] into AX and advances ESI." },
+  { name: "lodsd", summary: "Loads the doubleword at [ESI] into EAX and advances ESI." },
+  { name: "scasb", summary: "Compares AL with the byte at [EDI] and advances EDI." },
+  { name: "scasw", summary: "Compares AX with the word at [EDI] and advances EDI." },
+  { name: "scasd", summary: "Compares EAX with the doubleword at [EDI] and advances EDI." },
+  { name: "cmpsb", summary: "Compares the bytes at [ESI] and [EDI] and advances both." },
+  { name: "cmpsw", summary: "Compares the words at [ESI] and [EDI] and advances both." },
+  { name: "cmpsd", summary: "Compares the doublewords at [ESI] and [EDI] and advances both." },
 ]
 
 export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
