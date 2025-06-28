@@ -121,6 +121,11 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "cmpsb", summary: "Compares the bytes at [ESI] and [EDI] and advances both." },
   { name: "cmpsw", summary: "Compares the words at [ESI] and [EDI] and advances both." },
   { name: "cmpsd", summary: "Compares the doublewords at [ESI] and [EDI] and advances both." },
+  { name: "rep", summary: "Repeats the following string instruction ECX times." },
+  { name: "repe", summary: "Repeats the following string instruction while equal and ECX is not zero." },
+  { name: "repne", summary: "Repeats the following string instruction while not equal and ECX is not zero." },
+  { name: "repz", summary: "Same as repe." },
+  { name: "repnz", summary: "Same as repne." },
 ]
 
 export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
