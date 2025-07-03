@@ -132,6 +132,13 @@ export const INSTRUCTIONS: Instruction[] = [
   { name: "repne", summary: "Repeats the following string instruction while not equal and ECX is not zero." },
   { name: "repz", summary: "Same as repe." },
   { name: "repnz", summary: "Same as repne." },
+  { name: "bswap", summary: "Reverses the byte order of a 32-bit register." },
+  { name: "xlat", summary: "Loads the byte at [EBX + AL] into AL (table lookup)." },
+  { name: "enter", summary: "Creates a stack frame for a procedure." },
+  { name: "leave", summary: "Removes the stack frame created by enter." },
+  { name: "lahf", summary: "Loads the low byte of EFLAGS into AH." },
+  { name: "sahf", summary: "Stores AH into the low byte of EFLAGS." },
+  { name: "hlt", summary: "Halts the processor until the next interrupt." },
 ]
 
 export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
