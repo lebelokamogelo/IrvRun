@@ -449,9 +449,20 @@ function buildCheatSheetHtml(): string {
     (p) =>
       `<tr><td><code>${p.name}</code></td><td>${p.summary}</td><td>${p.receives}</td><td>${p.returns}</td></tr>`
   ).join("")
-  const insRows = INSTRUCTIONS.map(
-    (i) => `<tr><td><code>${i.name}</code></td><td>${i.summary}</td></tr>`
-  ).join("")
+  const categories: string[] = []
+  for (const i of INSTRUCTIONS) {
+    if (!categories.includes(i.category)) {
+      categories.push(i.category)
+    }
+  }
+  const insRows = categories
+    .map((category) => {
+      const rows = INSTRUCTIONS.filter((i) => i.category === category)
+        .map((i) => `<tr><td><code>${i.name}</code></td><td>${i.summary}</td></tr>`)
+        .join("")
+      return `<tr><th colspan="2">${category}</th></tr>${rows}`
+    })
+    .join("")
 
   return `<!DOCTYPE html>
 <html>
