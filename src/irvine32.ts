@@ -9,10 +9,22 @@ export interface Irvine32Proc {
 
 export const IRVINE32_PROCS: Irvine32Proc[] = [
   {
+    name: "CloseFile",
+    summary: "Closes a file that was opened for reading or writing.",
+    receives: "EAX = file handle.",
+    returns: "EAX is nonzero when the file was closed successfully.",
+  },
+  {
     name: "Clrscr",
     summary: "Clears the console window and locates the cursor at the top left.",
     receives: "Nothing.",
     returns: "Nothing.",
+  },
+  {
+    name: "CreateOutputFile",
+    summary: "Creates a new file for writing, replacing any existing file with the same name.",
+    receives: "EDX = offset of a null-terminated file name.",
+    returns: "EAX = a file handle, or INVALID_HANDLE_VALUE (-1) if the file could not be created.",
   },
   {
     name: "Crlf",
@@ -57,6 +69,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "OpenInputFile",
+    summary: "Opens an existing file for reading.",
+    receives: "EDX = offset of a null-terminated file name.",
+    returns: "EAX = a file handle, or INVALID_HANDLE_VALUE (-1) if the file could not be opened.",
+  },
+  {
     name: "ParseInteger32",
     summary: "Converts a string of digits into a 32-bit signed integer.",
     receives: "EDX = offset of the string, ECX = string length.",
@@ -69,16 +87,16 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "EAX = random integer in the range 0 to FFFFFFFFh.",
   },
   {
-    name: "RandomRange",
-    summary: "Generates a pseudo-random integer within a range.",
-    receives: "EAX = upper bound (exclusive).",
-    returns: "EAX = random integer in the range 0 to (N - 1).",
-  },
-  {
     name: "Randomize",
     summary: "Seeds the random number generator from the system time.",
     receives: "Nothing.",
     returns: "Nothing.",
+  },
+  {
+    name: "RandomRange",
+    summary: "Generates a pseudo-random integer within a range.",
+    receives: "EAX = upper bound (exclusive).",
+    returns: "EAX = random integer in the range 0 to (N - 1).",
   },
   {
     name: "ReadChar",
@@ -91,6 +109,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Reads an unsigned 32-bit decimal integer from the keyboard.",
     receives: "Nothing.",
     returns: "EAX = the value entered.",
+  },
+  {
+    name: "ReadFromFile",
+    summary: "Reads a block of bytes from an open file into a buffer.",
+    receives: "EAX = file handle, EDX = offset of the buffer, ECX = size of the buffer.",
+    returns: "EAX = the number of bytes read, or CF set with EAX = the error code.",
   },
   {
     name: "ReadHex",
@@ -163,5 +187,11 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Writes a null-terminated string to the console.",
     receives: "EDX = offset of the string.",
     returns: "Nothing.",
+  },
+  {
+    name: "WriteToFile",
+    summary: "Writes a buffer to an open file.",
+    receives: "EAX = file handle, EDX = offset of the buffer, ECX = number of bytes to write.",
+    returns: "EAX = the number of bytes written, or zero if the write failed.",
   },
 ]
