@@ -141,6 +141,36 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "Str_compare",
+    summary: "Compares two null-terminated strings and sets the flags.",
+    receives: "ESI = offset of the first string, EDI = offset of the second string.",
+    returns: "The Zero and Carry flags, as if the strings had been compared with cmp.",
+  },
+  {
+    name: "Str_copy",
+    summary: "Copies a null-terminated string into a destination buffer.",
+    receives: "ESI = offset of the source, EDI = offset of the destination.",
+    returns: "Nothing. The destination must be large enough to hold the source.",
+  },
+  {
+    name: "Str_length",
+    summary: "Returns the length of a null-terminated string.",
+    receives: "EDX = offset of the string.",
+    returns: "EAX = the length in bytes.",
+  },
+  {
+    name: "Str_trim",
+    summary: "Removes trailing occurrences of a character from a string.",
+    receives: "EDX = offset of the string, AL = the character to remove.",
+    returns: "Nothing. The string is trimmed in place.",
+  },
+  {
+    name: "Str_ucase",
+    summary: "Converts a null-terminated string to upper case.",
+    receives: "EDX = offset of the string.",
+    returns: "Nothing. The string is converted in place.",
+  },
+  {
     name: "StrLength",
     summary: "Returns the length of a null-terminated string.",
     receives: "EDX = offset of the string.",
