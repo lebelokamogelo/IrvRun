@@ -57,6 +57,18 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "The structure is filled in.",
   },
   {
+    name: "GetMaxXY",
+    summary: "Returns the size of the console window buffer.",
+    receives: "Nothing.",
+    returns: "DL = number of columns, DH = number of rows.",
+  },
+  {
+    name: "GetTextColor",
+    summary: "Returns the current console foreground and background colors.",
+    receives: "Nothing.",
+    returns: "AH = background color, AL = foreground color.",
+  },
+  {
     name: "Gotoxy",
     summary: "Moves the cursor to a given row and column in the console window.",
     receives: "DH = row (Y), DL = column (X).",
@@ -67,6 +79,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Displays a popup message box.",
     receives: "EDX = offset of the message, EBX = offset of the title (or 0).",
     returns: "Nothing.",
+  },
+  {
+    name: "MsgBoxAsk",
+    summary: "Displays a popup message box with Yes and No buttons.",
+    receives: "EDX = offset of the question, EBX = offset of the title (or 0).",
+    returns: "EAX = IDYES (6) or IDNO (7).",
   },
   {
     name: "OpenInputFile",
@@ -127,6 +145,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Reads a signed 32-bit integer from the keyboard.",
     receives: "Nothing.",
     returns: "EAX = the value entered (CF set on overflow).",
+  },
+  {
+    name: "ReadKey",
+    summary: "Checks for a waiting keystroke without blocking the program.",
+    receives: "Nothing.",
+    returns: "ZF set if no key was pressed; otherwise AL = the ASCII code and AH = the scan code.",
   },
   {
     name: "ReadString",
