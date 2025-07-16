@@ -51,6 +51,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "GetCommandTail",
+    summary: "Copies the command line arguments into a buffer.",
+    receives: "EDX = offset of a 129-byte buffer.",
+    returns: "CF set if the command line was empty, otherwise the buffer holds the arguments.",
+  },
+  {
     name: "GetDateTime",
     summary: "Gets the current system date and time.",
     receives: "EDX = offset of a 64-bit SYSTEMTIME structure.",
@@ -63,6 +69,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "DL = number of columns, DH = number of rows.",
   },
   {
+    name: "GetMseconds",
+    summary: "Returns the number of milliseconds elapsed since midnight.",
+    receives: "Nothing.",
+    returns: "EAX = the elapsed milliseconds, useful for timing a section of code.",
+  },
+  {
     name: "GetTextColor",
     summary: "Returns the current console foreground and background colors.",
     receives: "Nothing.",
@@ -73,6 +85,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Moves the cursor to a given row and column in the console window.",
     receives: "DH = row (Y), DL = column (X).",
     returns: "Nothing.",
+  },
+  {
+    name: "IsDigit",
+    summary: "Checks whether a character is a decimal digit.",
+    receives: "AL = the character to test.",
+    returns: "ZF set if AL holds a digit between 0 and 9.",
   },
   {
     name: "MsgBox",
@@ -91,6 +109,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Opens an existing file for reading.",
     receives: "EDX = offset of a null-terminated file name.",
     returns: "EAX = a file handle, or INVALID_HANDLE_VALUE (-1) if the file could not be opened.",
+  },
+  {
+    name: "ParseDecimal32",
+    summary: "Converts an unsigned decimal string into a 32-bit integer.",
+    receives: "EDX = offset of the string, ECX = string length.",
+    returns: "EAX = the integer value, or zero with CF set if the string was invalid.",
   },
   {
     name: "ParseInteger32",
