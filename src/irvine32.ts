@@ -189,6 +189,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "ShowFPUStack",
+    summary: "Writes the floating point unit's register stack to the console.",
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
     name: "Str_compare",
     summary: "Compares two null-terminated strings and sets the flags.",
     receives: "ESI = offset of the first string, EDI = offset of the second string.",
@@ -237,6 +243,12 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "WriteBinB",
+    summary: "Writes an integer to the console in binary, using a chosen size.",
+    receives: "EAX = the value to write, EBX = size in bytes (1, 2, or 4).",
+    returns: "Nothing.",
+  },
+  {
     name: "WriteChar",
     summary: "Writes a single character to the console.",
     receives: "AL = the character.",
@@ -255,9 +267,27 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     returns: "Nothing.",
   },
   {
+    name: "WriteHexB",
+    summary: "Writes an integer to the console in hexadecimal, using a chosen size.",
+    receives: "EAX = the value to write, EBX = size in bytes (1, 2, or 4).",
+    returns: "Nothing.",
+  },
+  {
     name: "WriteInt",
     summary: "Writes a signed 32-bit integer to the console in decimal.",
     receives: "EAX = the value to write.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteStackFrame",
+    summary: "Writes the current procedure's stack frame to the console.",
+    receives: "EAX = number of passed arguments, EBX = number of local doublewords, ECX = number of saved registers.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteStackFrameName",
+    summary: "Writes the current stack frame, labelled with the procedure name.",
+    receives: "The same values as WriteStackFrame, plus EDX = offset of the procedure name.",
     returns: "Nothing.",
   },
   {
@@ -271,5 +301,11 @@ export const IRVINE32_PROCS: Irvine32Proc[] = [
     summary: "Writes a buffer to an open file.",
     receives: "EAX = file handle, EDX = offset of the buffer, ECX = number of bytes to write.",
     returns: "EAX = the number of bytes written, or zero if the write failed.",
+  },
+  {
+    name: "WriteWindowsMsg",
+    summary: "Writes the most recent Windows error message to the console.",
+    receives: "Nothing.",
+    returns: "Nothing. Useful after a file operation fails.",
   },
 ]
