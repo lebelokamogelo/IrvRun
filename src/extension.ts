@@ -5,6 +5,7 @@ import * as path from "path"
 import * as vscode from "vscode"
 import { INSTRUCTIONS, MNEMONICS } from "./instructions"
 import { IRVINE32_PROCS } from "./irvine32"
+import { REGISTERS } from "./registers"
 import { parseSymbols } from "./symbols"
 
 let runTerminal: vscode.Terminal | undefined
@@ -547,6 +548,13 @@ export function activate(context: vscode.ExtensionContext) {
       const ins = INSTRUCTIONS.find((i) => i.name.toLowerCase() === word)
       if (ins) {
         const md = new vscode.MarkdownString(`**${ins.name}** *(instruction)*\n\n${ins.summary}`)
+        return new vscode.Hover(md, range)
+      }
+      const reg = REGISTERS.find((r) => r.name.toLowerCase() === word)
+      if (reg) {
+        const md = new vscode.MarkdownString(
+          `**${reg.name}** *(${reg.size} register)*\n\n${reg.summary}`
+        )
         return new vscode.Hover(md, range)
       }
       return undefined
