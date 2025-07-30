@@ -3,6 +3,7 @@ import { exec } from "child_process"
 import * as fs from "fs"
 import * as path from "path"
 import * as vscode from "vscode"
+import { DIRECTIVES } from "./directives"
 import { INSTRUCTIONS, MNEMONICS } from "./instructions"
 import { IRVINE32_PROCS } from "./irvine32"
 import { REGISTERS } from "./registers"
@@ -548,6 +549,19 @@ export function activate(context: vscode.ExtensionContext) {
       const ins = INSTRUCTIONS.find((i) => i.name.toLowerCase() === word)
       if (ins) {
         const md = new vscode.MarkdownString(`**${ins.name}** *(instruction)*\n\n${ins.summary}`)
+        return new vscode.Hover(md, range)
+      }
+      // A directive such as .data is written with a leading dot, which the word
+      // range never includes, so try the dotted spelling too.
+      const dotted = range.start.character > 0 &&
+        document.getText(
+          new vscode.Range(range.start.translate(0, -1), range.start)
+        ) === "."
+      const dir = DIRECTIVES.find(
+        (d) => d.name.toLowerCase() === (dotted ? "." + word : word)
+      )
+      if (dir) {
+        const md = new vscode.MarkdownString(`**${dir.name}** *(directive)*\n\n${dir.summary}`)
         return new vscode.Hover(md, range)
       }
       const reg = REGISTERS.find((r) => r.name.toLowerCase() === word)
