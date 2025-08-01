@@ -55,8 +55,17 @@
           ".asm"
         ],
         "aliases": [
-          "Irvine32"
+          "Irvine32",
+          "MASM",
+          "asm"
         ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "asm",
+        "scopeName": "source.asm",
+        "path": "./syntaxes/masm.tmLanguage.json"
       }
     ]
   },
