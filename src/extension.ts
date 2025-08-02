@@ -594,6 +594,20 @@ export function activate(context: vscode.ExtensionContext) {
         items.push(item)
         taken.add(ins.name.toLowerCase())
       }
+      for (const reg of REGISTERS) {
+        const item = new vscode.CompletionItem(reg.name, vscode.CompletionItemKind.Variable)
+        item.detail = `${reg.size} register`
+        item.documentation = new vscode.MarkdownString(reg.summary)
+        items.push(item)
+        taken.add(reg.name.toLowerCase())
+      }
+      for (const dir of DIRECTIVES) {
+        const item = new vscode.CompletionItem(dir.name, vscode.CompletionItemKind.Keyword)
+        item.detail = "directive"
+        item.documentation = new vscode.MarkdownString(dir.summary)
+        items.push(item)
+        taken.add(dir.name.toLowerCase())
+      }
       for (const sym of parseSymbols(document)) {
         if (taken.has(sym.name.toLowerCase())) {
           continue
