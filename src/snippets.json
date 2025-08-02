@@ -2,9 +2,6 @@
   "Program skeleton": {
     "prefix": "skeleton",
     "body": [
-      ".386",
-      ".model flat, stdcall",
-      "",
       "INCLUDE Irvine32.inc",
       "",
       ".data",
@@ -12,10 +9,8 @@
       "",
       ".code",
       "main PROC",
-      "    call Clrscr",
       "    mov edx, OFFSET msg",
       "    call WriteString",
-      "    call Crlf",
       "    exit",
       "main ENDP",
       "",
