@@ -18,7 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
       const fileName = path.basename(filePath, ".asm")
       const fileDir = path.dirname(filePath)
 
-      const terminal = vscode.window.createTerminal("IrvRun")
+      const terminal = vscode.window.createTerminal({
+        name: "IrvRun",
+        shellPath: "C:\\Windows\\System32\\cmd.exe",
+        shellArgs: [],
+      })
       terminal.show()
       terminal.sendText(`cd "${fileDir}"`)
       terminal.sendText(`make32 ${fileName} && ${fileName}`)
