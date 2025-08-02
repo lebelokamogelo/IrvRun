@@ -4,6 +4,7 @@
   "description": "Run MASM32 Assembly code using Irvine32 with one click.",
   "version": "1.0.0",
   "publisher": "lebelokamogelo",
+  "icon": "./images/icon.png",
   "engines": {
     "vscode": "^1.56.0"
   },
