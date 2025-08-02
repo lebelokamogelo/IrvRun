@@ -2,9 +2,9 @@
   "name": "irvrun",
   "displayName": "IrvRun",
   "description": "Run MASM32 Assembly code using Irvine32 with one click.",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "publisher": "lebelokamogelo",
-  "icon": "./images/icon.png",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.56.0"
   },
@@ -72,6 +72,7 @@
     "snippets": [
       {
         "language": "asm",
+        "scopeName": "source.asm",
         "path": "./src/snippets.json"
       }
     ]
