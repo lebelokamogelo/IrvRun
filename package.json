@@ -67,6 +67,12 @@
         "scopeName": "source.asm",
         "path": "./syntaxes/masm.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "asm",
+        "path": "./src/snippets.json"
+      }
     ]
   },
   "scripts": {
