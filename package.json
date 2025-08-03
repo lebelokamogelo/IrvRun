@@ -1,0 +1,92 @@
+{
+  "name": "irvrun",
+  "displayName": "IrvRun",
+  "description": "Run MASM32 Assembly code using Irvine32 with one click.",
+  "version": "1.0.0",
+  "publisher": "lebelokamogelo",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.56.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "masm",
+    "irvine32",
+    "assembly",
+    "runner"
+  ],
+  "main": "./out/src/extension",
+  "activationEvents": [
+    "onCommand:extension.irvrun"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "code-runner.run",
+        "title": "Run MASM Code",
+        "icon": "$(play)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "code-runner.run",
+        "key": "ctrl+alt+n"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "code-runner.run",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "code-runner.run",
+          "group": "navigation"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "asm",
+        "extensions": [
+          ".asm"
+        ],
+        "aliases": [
+          "Irvine32",
+          "MASM",
+          "asm"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "asm",
+        "scopeName": "source.asm",
+        "path": "./syntaxes/masm.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "asm",
+        "path": "./snippets.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "applicationinsights": "^3.8.0",
+    "micromatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.40",
+    "@types/vscode": "^1.56.0",
+    "typescript": "^5.9.2"
+  }
+}

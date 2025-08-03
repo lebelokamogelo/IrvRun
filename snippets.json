@@ -1,0 +1,93 @@
+{
+  "Program skeleton": {
+    "prefix": "skeleton",
+    "body": [
+      "INCLUDE Irvine32.inc",
+      "",
+      ".data",
+      "    msg BYTE \"Hello, World!\", 0",
+      "",
+      ".code",
+      "main PROC",
+      "    mov edx, OFFSET msg",
+      "    call WriteString",
+      "    exit",
+      "main ENDP",
+      "",
+      "END main"
+    ],
+    "description": "Basic MASM + Irvine32 Program Skeleton"
+  },
+  "WriteString": {
+    "prefix": "writes",
+    "body": ["mov edx, OFFSET ${1:msg}", "call WriteString"],
+    "description": "Write a string using Irvine32"
+  },
+  "WriteInt": {
+    "prefix": "writei",
+    "body": ["mov eax, ${1:number}", "call WriteInt"],
+    "description": "Write an integer using Irvine32"
+  },
+  "ReadInt": {
+    "prefix": "readi",
+    "body": ["call ReadInt", "mov ${1:variable}, eax"],
+    "description": "Read an integer from input"
+  },
+  "Exit": {
+    "prefix": "exit",
+    "body": ["exit"],
+    "description": "Terminate the program using Irvine32"
+  },
+  "Procedure": {
+    "prefix": "proc",
+    "body": ["${1:name} PROC", "    ${2:instructions}", "${1:name} ENDP"],
+    "description": "Define a procedure"
+  },
+  "Loop": {
+    "prefix": "loop",
+    "body": [
+      "mov ecx, ${1:count}",
+      "${2:label}:",
+      "    ${3:code}",
+      "loop ${2:label}"
+    ],
+    "description": "Loop using ECX"
+  },
+  "If-Else (CMP)": {
+    "prefix": "ifelse",
+    "body": [
+      "cmp ${1:reg1}, ${2:reg2}",
+      "je ${3:equalLabel}",
+      "jne ${4:notEqualLabel}"
+    ],
+    "description": "CMP instruction with conditional jumps"
+  },
+  "Define Data": {
+    "prefix": "data",
+    "body": ["${1:name} ${2:type} ${3:value}"],
+    "description": "Define data (.data section)"
+  },
+  "ClrScr": {
+    "prefix": "cls",
+    "body": ["call Clrscr"],
+    "description": "Clear screen using Irvine32"
+  },
+  "New Line": {
+    "prefix": "crlf",
+    "body": ["call Crlf"],
+    "description": "Print a new line"
+  },
+  "Get Date and Time": {
+    "prefix": "datetime",
+    "body": ["call GetDateTime", "; result in edx:eax (datetime)"],
+    "description": "Get system date and time"
+  },
+  "Random Number": {
+    "prefix": "rand",
+    "body": [
+      "call RandomRange ; needs input in eax",
+      "; eax contains random number"
+    ],
+    "description": "Generate a random number"
+  }
+}
