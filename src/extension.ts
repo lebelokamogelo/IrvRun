@@ -621,6 +621,34 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const signatures = vscode.languages.registerSignatureHelpProvider(
+    "asm",
+    {
+      provideSignatureHelp(document, position) {
+        const line = document.lineAt(position.line).text.substring(0, position.character)
+        const m = /\bcall\s+([A-Za-z_@$?][\w@$?]*)?$/i.exec(line)
+        if (!m) {
+          return undefined
+        }
+        const name = (m[1] || "").toLowerCase()
+        const proc = IRVINE32_PROCS.find((p) => p.name.toLowerCase() === name)
+        if (!proc) {
+          return undefined
+        }
+        const info = new vscode.SignatureInformation(
+          `call ${proc.name}`,
+          procMarkdown(proc.summary, proc.receives, proc.returns)
+        )
+        const help = new vscode.SignatureHelp()
+        help.signatures = [info]
+        help.activeSignature = 0
+        help.activeParameter = 0
+        return help
+      },
+    },
+    " "
+  )
+
   const symbolProvider = vscode.languages.registerDocumentSymbolProvider("asm", {
     provideDocumentSymbols(document) {
       return parseSymbols(document).map((s) => {
@@ -665,6 +693,7 @@ export function activate(context: vscode.ExtensionContext) {
     statusBar,
     hover,
     completion,
+    signatures,
     symbolProvider,
     definitionProvider,
     formatter,
