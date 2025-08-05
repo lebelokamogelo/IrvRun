@@ -7,7 +7,7 @@ import { DIRECTIVES } from "./directives"
 import { INSTRUCTIONS, MNEMONICS } from "./instructions"
 import { IRVINE32_PROCS } from "./irvine32"
 import { REGISTERS } from "./registers"
-import { parseSymbols } from "./symbols"
+import { parseSymbols, stripComment } from "./symbols"
 
 let runTerminal: vscode.Terminal | undefined
 let output: vscode.OutputChannel
@@ -396,6 +396,23 @@ function updateStatusBar(item: vscode.StatusBarItem): void {
   }
 }
 
+// Finds every mention of a symbol outside comments. MASM identifiers may
+// contain @, $ and ?, so word boundaries are spelled out by hand.
+function findOccurrences(document: vscode.TextDocument, word: string): vscode.Range[] {
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  const re = new RegExp(`(?<![\\w@$?])${escaped}(?![\\w@$?])`, "gi")
+  const ranges: vscode.Range[] = []
+  for (let i = 0; i < document.lineCount; i++) {
+    const text = stripComment(document.lineAt(i).text)
+    re.lastIndex = 0
+    let m: RegExpExecArray | null
+    while ((m = re.exec(text)) !== null) {
+      ranges.push(new vscode.Range(i, m.index, i, m.index + m[0].length))
+    }
+  }
+  return ranges
+}
+
 function procMarkdown(summary: string, receives: string, returns: string): vscode.MarkdownString {
   const md = new vscode.MarkdownString()
   md.appendMarkdown(`${summary}\n\n`)
@@ -678,6 +695,20 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const highlights = vscode.languages.registerDocumentHighlightProvider("asm", {
+    provideDocumentHighlights(document, position) {
+      const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
+      if (!range) {
+        return undefined
+      }
+      const word = document.getText(range)
+      if (MNEMONICS.has(word.toLowerCase())) {
+        return undefined
+      }
+      return findOccurrences(document, word).map((r) => new vscode.DocumentHighlight(r))
+    },
+  })
+
   const formatter = vscode.languages.registerDocumentFormattingEditProvider("asm", {
     provideDocumentFormattingEdits(document) {
       return formatDocument(document)
@@ -696,6 +727,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    highlights,
     formatter,
     vscode.commands.registerCommand("irvrun.run", runCommand),
     vscode.commands.registerCommand("irvrun.build", buildCommand),

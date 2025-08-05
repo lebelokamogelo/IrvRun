@@ -15,7 +15,7 @@ const DATA_RE = /^(\s*)([A-Za-z_@$?][\w@$?]*)\s+(BYTE|SBYTE|WORD|SWORD|DWORD|SDW
 const CONST_RE = /^(\s*)([A-Za-z_@$?][\w@$?]*)\s+(EQU|=)\s/i
 const LABEL_RE = /^(\s*)([A-Za-z_@$?][\w@$?]*)\s*:(?!=)/
 
-function stripComment(text: string): string {
+export function stripComment(text: string): string {
   const idx = text.indexOf(";")
   return idx >= 0 ? text.substring(0, idx) : text
 }
