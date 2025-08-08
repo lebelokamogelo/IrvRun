@@ -413,6 +413,26 @@ function findOccurrences(document: vscode.TextDocument, word: string): vscode.Ra
   return ranges
 }
 
+function computeFoldingRanges(document: vscode.TextDocument): vscode.FoldingRange[] {
+  const procRe = /^\s*[A-Za-z_@$?][\w@$?]*\s+PROC\b/i
+  const endpRe = /^\s*[A-Za-z_@$?][\w@$?]*\s+ENDP\b/i
+  const ranges: vscode.FoldingRange[] = []
+  const open: number[] = []
+
+  for (let i = 0; i < document.lineCount; i++) {
+    const text = stripComment(document.lineAt(i).text)
+    if (procRe.test(text)) {
+      open.push(i)
+    } else if (endpRe.test(text)) {
+      const start = open.pop()
+      if (start !== undefined && i > start) {
+        ranges.push(new vscode.FoldingRange(start, i))
+      }
+    }
+  }
+  return ranges
+}
+
 function procMarkdown(summary: string, receives: string, returns: string): vscode.MarkdownString {
   const md = new vscode.MarkdownString()
   md.appendMarkdown(`${summary}\n\n`)
@@ -695,6 +715,12 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const folding = vscode.languages.registerFoldingRangeProvider("asm", {
+    provideFoldingRanges(document) {
+      return computeFoldingRanges(document)
+    },
+  })
+
   const highlights = vscode.languages.registerDocumentHighlightProvider("asm", {
     provideDocumentHighlights(document, position) {
       const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
@@ -727,6 +753,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    folding,
     highlights,
     formatter,
     vscode.commands.registerCommand("irvrun.run", runCommand),
