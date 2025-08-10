@@ -416,11 +416,27 @@ function findOccurrences(document: vscode.TextDocument, word: string): vscode.Ra
 function computeFoldingRanges(document: vscode.TextDocument): vscode.FoldingRange[] {
   const procRe = /^\s*[A-Za-z_@$?][\w@$?]*\s+PROC\b/i
   const endpRe = /^\s*[A-Za-z_@$?][\w@$?]*\s+ENDP\b/i
+  const segRe = /^\s*\.(data\?|data|code|const|stack)\b/i
+  const endRe = /^\s*END\b/i
   const ranges: vscode.FoldingRange[] = []
   const open: number[] = []
+  let segment = -1
+
+  const closeSegment = (line: number) => {
+    if (segment >= 0 && line - 1 > segment) {
+      ranges.push(new vscode.FoldingRange(segment, line - 1, vscode.FoldingRangeKind.Region))
+    }
+    segment = -1
+  }
 
   for (let i = 0; i < document.lineCount; i++) {
     const text = stripComment(document.lineAt(i).text)
+    if (segRe.test(text)) {
+      closeSegment(i)
+      segment = i
+    } else if (endRe.test(text)) {
+      closeSegment(i)
+    }
     if (procRe.test(text)) {
       open.push(i)
     } else if (endpRe.test(text)) {
@@ -430,6 +446,7 @@ function computeFoldingRanges(document: vscode.TextDocument): vscode.FoldingRang
       }
     }
   }
+  closeSegment(document.lineCount)
   return ranges
 }
 
