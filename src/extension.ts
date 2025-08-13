@@ -732,6 +732,21 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const codeLens = vscode.languages.registerCodeLensProvider("asm", {
+    provideCodeLenses(document) {
+      return parseSymbols(document)
+        .filter((s) => s.kind === vscode.SymbolKind.Function && s.name.toLowerCase() === "main")
+        .map(
+          (s) =>
+            new vscode.CodeLens(new vscode.Range(s.line, 0, s.line, 0), {
+              title: "$(play) Run",
+              command: "irvrun.run",
+              arguments: [document.uri],
+            })
+        )
+    },
+  })
+
   const folding = vscode.languages.registerFoldingRangeProvider("asm", {
     provideFoldingRanges(document) {
       return computeFoldingRanges(document)
@@ -770,6 +785,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    codeLens,
     folding,
     highlights,
     formatter,
