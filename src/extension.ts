@@ -732,6 +732,28 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const rename = vscode.languages.registerRenameProvider("asm", {
+    prepareRename(document, position) {
+      const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
+      const word = range ? document.getText(range).toLowerCase() : ""
+      if (!range || !parseSymbols(document).some((s) => s.name.toLowerCase() === word)) {
+        throw new Error("Only names defined in this file can be renamed.")
+      }
+      return range
+    },
+    provideRenameEdits(document, position, newName) {
+      const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
+      if (!range) {
+        return undefined
+      }
+      const edit = new vscode.WorkspaceEdit()
+      for (const found of findOccurrences(document, document.getText(range))) {
+        edit.replace(document.uri, found, newName)
+      }
+      return edit
+    },
+  })
+
   const codeLens = vscode.languages.registerCodeLensProvider("asm", {
     provideCodeLenses(document) {
       return parseSymbols(document)
@@ -785,6 +807,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    rename,
     codeLens,
     folding,
     highlights,
