@@ -732,6 +732,18 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const references = vscode.languages.registerReferenceProvider("asm", {
+    provideReferences(document, position) {
+      const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
+      if (!range) {
+        return undefined
+      }
+      return findOccurrences(document, document.getText(range)).map(
+        (r) => new vscode.Location(document.uri, r)
+      )
+    },
+  })
+
   const rename = vscode.languages.registerRenameProvider("asm", {
     prepareRename(document, position) {
       const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
@@ -807,6 +819,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    references,
     rename,
     codeLens,
     folding,
