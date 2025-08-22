@@ -114,6 +114,20 @@
         }
       ]
     },
+    "taskDefinitions": [
+      {
+        "type": "irvrun",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The IrvRun task to run."
+          }
+        }
+      }
+    ],
     "languages": [
       {
         "id": "asm",

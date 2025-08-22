@@ -123,18 +123,53 @@ function runProc(
   })
 }
 
+// The MASM tools are driven from the command line, so every entry point needs
+// the same PATH, INCLUDE and LIB overrides.
+function buildEnv(masmPath: string): { [key: string]: string } {
+  const env: { [key: string]: string } = {}
+  for (const [key, value] of Object.entries(process.env)) {
+    if (value !== undefined) {
+      env[key] = value
+    }
+  }
+  env.PATH = `${masmPath};${process.env.PATH || ""}`
+  env.INCLUDE = path.join(masmPath, "INCLUDE")
+  env.LIB = path.join(masmPath, "LIB")
+  return env
+}
+
+function assembleCommand(masmPath: string, name: string): string {
+  return `"${path.join(masmPath, "ML.EXE")}" /nologo -Zi -c -Fl -Sg -coff "${name}.asm"`
+}
+
+function linkCommand(masmPath: string, name: string): string {
+  return `"${path.join(masmPath, "LINK32.EXE")}" /nologo "${name}.obj" irvine32.lib kernel32.lib /SUBSYSTEM:CONSOLE /DEBUG /MAP`
+}
+
+function createBuildTask(fileUri: vscode.Uri): vscode.Task {
+  const dir = path.dirname(fileUri.fsPath)
+  const name = path.basename(fileUri.fsPath, ".asm")
+  const masmPath = getMasmPath()
+  const task = new vscode.Task(
+    { type: "irvrun", task: "build" },
+    vscode.TaskScope.Workspace,
+    `build ${name}.asm`,
+    "IrvRun",
+    new vscode.ShellExecution(
+      `${assembleCommand(masmPath, name)} && ${linkCommand(masmPath, name)}`,
+      { cwd: dir, env: buildEnv(masmPath) }
+    )
+  )
+  task.group = vscode.TaskGroup.Build
+  return task
+}
+
 async function build(fileUri: vscode.Uri): Promise<boolean> {
   const filePath = fileUri.fsPath
   const dir = path.dirname(filePath)
   const name = path.basename(filePath, ".asm")
   const masmPath = getMasmPath()
-  const env: { [key: string]: string | undefined } = {
-    ...process.env,
-    PATH: `${masmPath};${process.env.PATH || ""}`,
-    INCLUDE: path.join(masmPath, "INCLUDE"),
-    LIB: path.join(masmPath, "LIB"),
-  }
-  const opts = { cwd: dir, env }
+  const opts = { cwd: dir, env: buildEnv(masmPath) }
   const ml = path.join(masmPath, "ML.EXE")
   const link = path.join(masmPath, "LINK32.EXE")
 
@@ -154,10 +189,7 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
   await runProc(`taskkill /F /IM "${name}.exe"`, opts)
 
   output.appendLine(`> Assembling ${name}.asm`)
-  const asm = await runProc(
-    `"${ml}" /nologo -Zi -c -Fl -Sg -coff "${name}.asm"`,
-    opts
-  )
+  const asm = await runProc(assembleCommand(masmPath, name), opts)
   output.append(asm.output)
 
   if (asm.code !== 0) {
@@ -167,10 +199,7 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
   }
 
   output.appendLine(`> Linking ${name}.obj`)
-  const lnk = await runProc(
-    `"${link}" /nologo "${name}.obj" irvine32.lib kernel32.lib /SUBSYSTEM:CONSOLE /DEBUG /MAP`,
-    opts
-  )
+  const lnk = await runProc(linkCommand(masmPath, name), opts)
   output.append(lnk.output)
   reportDiagnostics(fileUri, `${asm.output}\n${lnk.output}`)
 
@@ -732,6 +761,19 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const taskProvider = vscode.tasks.registerTaskProvider("irvrun", {
+    provideTasks() {
+      const editor = vscode.window.activeTextEditor
+      if (!editor || path.extname(editor.document.uri.fsPath).toLowerCase() !== ".asm") {
+        return []
+      }
+      return [createBuildTask(editor.document.uri)]
+    },
+    resolveTask() {
+      return undefined
+    },
+  })
+
   const references = vscode.languages.registerReferenceProvider("asm", {
     provideReferences(document, position) {
       const range = document.getWordRangeAtPosition(position, /[A-Za-z_@$?][\w@$?]*/)
@@ -820,6 +862,7 @@ export function activate(context: vscode.ExtensionContext) {
     symbolProvider,
     definitionProvider,
     references,
+    taskProvider,
     rename,
     codeLens,
     folding,
