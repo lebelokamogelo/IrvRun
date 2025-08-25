@@ -383,24 +383,24 @@ function lintDocument(document: vscode.TextDocument): void {
   const hasCode = /^\s*\.code\b/im.test(text) || /\bPROC\b/i.test(text)
 
   if (hasCode && !/INCLUDE\s+Irvine32\.inc/i.test(text)) {
-    items.push(
-      new vscode.Diagnostic(
-        new vscode.Range(0, 0, 0, Number.MAX_SAFE_INTEGER),
-        "Missing 'INCLUDE Irvine32.inc'. Irvine32 procedures will not be found without it.",
-        vscode.DiagnosticSeverity.Warning
-      )
+    const diag = new vscode.Diagnostic(
+      new vscode.Range(0, 0, 0, Number.MAX_SAFE_INTEGER),
+      "Missing 'INCLUDE Irvine32.inc'. Irvine32 procedures will not be found without it.",
+      vscode.DiagnosticSeverity.Warning
     )
+    diag.code = "missing-include"
+    items.push(diag)
   }
 
   if (hasCode && !/^\s*END\b/im.test(text)) {
     const last = Math.max(0, document.lineCount - 1)
-    items.push(
-      new vscode.Diagnostic(
-        new vscode.Range(last, 0, last, Number.MAX_SAFE_INTEGER),
-        "Missing 'END' directive at the end of the program.",
-        vscode.DiagnosticSeverity.Warning
-      )
+    const diag = new vscode.Diagnostic(
+      new vscode.Range(last, 0, last, Number.MAX_SAFE_INTEGER),
+      "Missing 'END' directive at the end of the program.",
+      vscode.DiagnosticSeverity.Warning
     )
+    diag.code = "missing-end"
+    items.push(diag)
   }
 
   for (const d of items) {
@@ -761,6 +761,43 @@ export function activate(context: vscode.ExtensionContext) {
     },
   })
 
+  const quickFixes = vscode.languages.registerCodeActionsProvider(
+    "asm",
+    {
+      provideCodeActions(document, range, context) {
+        const actions: vscode.CodeAction[] = []
+        for (const diag of context.diagnostics) {
+          if (diag.code === "missing-include") {
+            const fix = new vscode.CodeAction(
+              "Add INCLUDE Irvine32.inc",
+              vscode.CodeActionKind.QuickFix
+            )
+            fix.edit = new vscode.WorkspaceEdit()
+            fix.edit.insert(document.uri, new vscode.Position(0, 0), "INCLUDE Irvine32.inc\n\n")
+            fix.diagnostics = [diag]
+            actions.push(fix)
+          } else if (diag.code === "missing-end") {
+            const entry = parseSymbols(document).find(
+              (s) => s.kind === vscode.SymbolKind.Function
+            )
+            const label = entry ? entry.name : "main"
+            const fix = new vscode.CodeAction(`Add END ${label}`, vscode.CodeActionKind.QuickFix)
+            fix.edit = new vscode.WorkspaceEdit()
+            fix.edit.insert(
+              document.uri,
+              new vscode.Position(document.lineCount, 0),
+              `\nEND ${label}\n`
+            )
+            fix.diagnostics = [diag]
+            actions.push(fix)
+          }
+        }
+        return actions
+      },
+    },
+    { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
+  )
+
   const taskProvider = vscode.tasks.registerTaskProvider("irvrun", {
     provideTasks() {
       const editor = vscode.window.activeTextEditor
@@ -861,6 +898,7 @@ export function activate(context: vscode.ExtensionContext) {
     signatures,
     symbolProvider,
     definitionProvider,
+    quickFixes,
     references,
     taskProvider,
     rename,
