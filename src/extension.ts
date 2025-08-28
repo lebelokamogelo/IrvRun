@@ -654,6 +654,13 @@ export function activate(context: vscode.ExtensionContext) {
         )
         return new vscode.Hover(md, range)
       }
+      const sym = parseSymbols(document).find((s) => s.name.toLowerCase() === word)
+      if (sym) {
+        const md = new vscode.MarkdownString(
+          `**${sym.name}** *(${sym.detail})*\n\nDefined on line ${sym.line + 1} of this file.`
+        )
+        return new vscode.Hover(md, range)
+      }
       return undefined
     },
   })
