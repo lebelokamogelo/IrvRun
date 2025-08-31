@@ -7,7 +7,7 @@ import { DIRECTIVES } from "./directives"
 import { INSTRUCTIONS, MNEMONICS } from "./instructions"
 import { IRVINE32_PROCS } from "./irvine32"
 import { REGISTERS } from "./registers"
-import { parseSymbols, stripComment } from "./symbols"
+import { forgetSymbols, parseSymbols, stripComment } from "./symbols"
 
 let runTerminal: vscode.Terminal | undefined
 let output: vscode.OutputChannel
@@ -923,7 +923,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.onDidChangeActiveTextEditor(() => updateStatusBar(statusBar)),
     vscode.workspace.onDidOpenTextDocument(lintDocument),
     vscode.workspace.onDidChangeTextDocument((e) => scheduleLint(e.document)),
-    vscode.workspace.onDidCloseTextDocument((d) => lintDiagnostics.delete(d.uri)),
+    vscode.workspace.onDidCloseTextDocument((d) => {
+      lintDiagnostics.delete(d.uri)
+      forgetSymbols(d)
+    }),
     vscode.window.onDidCloseTerminal((t) => {
       if (t === runTerminal) {
         runTerminal = undefined

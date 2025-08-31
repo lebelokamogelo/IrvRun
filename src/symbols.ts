@@ -20,7 +20,7 @@ export function stripComment(text: string): string {
   return idx >= 0 ? text.substring(0, idx) : text
 }
 
-export function parseSymbols(document: vscode.TextDocument): AsmSymbol[] {
+function scan(document: vscode.TextDocument): AsmSymbol[] {
   const symbols: AsmSymbol[] = []
   for (let i = 0; i < document.lineCount; i++) {
     const text = stripComment(document.lineAt(i).text)
@@ -39,4 +39,28 @@ export function parseSymbols(document: vscode.TextDocument): AsmSymbol[] {
     }
   }
   return symbols
+}
+
+interface CacheEntry {
+  version: number
+  symbols: AsmSymbol[]
+}
+
+// Every provider parses the whole file, so hold on to the result until the
+// document actually changes.
+const cache = new Map<string, CacheEntry>()
+
+export function parseSymbols(document: vscode.TextDocument): AsmSymbol[] {
+  const key = document.uri.toString()
+  const cached = cache.get(key)
+  if (cached && cached.version === document.version) {
+    return cached.symbols
+  }
+  const symbols = scan(document)
+  cache.set(key, { version: document.version, symbols })
+  return symbols
+}
+
+export function forgetSymbols(document: vscode.TextDocument): void {
+  cache.delete(document.uri.toString())
 }
