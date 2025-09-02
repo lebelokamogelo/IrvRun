@@ -374,6 +374,17 @@ async function insertGameCommand(): Promise<void> {
   await editor.edit((builder) => builder.replace(fullRange, code))
 }
 
+function lintWarning(
+  range: vscode.Range,
+  message: string,
+  code: string,
+  severity = vscode.DiagnosticSeverity.Warning
+): vscode.Diagnostic {
+  const diag = new vscode.Diagnostic(range, message, severity)
+  diag.code = code
+  return diag
+}
+
 function lintDocument(document: vscode.TextDocument): void {
   if (document.languageId !== "asm") {
     return
@@ -383,24 +394,37 @@ function lintDocument(document: vscode.TextDocument): void {
   const hasCode = /^\s*\.code\b/im.test(text) || /\bPROC\b/i.test(text)
 
   if (hasCode && !/INCLUDE\s+Irvine32\.inc/i.test(text)) {
-    const diag = new vscode.Diagnostic(
-      new vscode.Range(0, 0, 0, Number.MAX_SAFE_INTEGER),
-      "Missing 'INCLUDE Irvine32.inc'. Irvine32 procedures will not be found without it.",
-      vscode.DiagnosticSeverity.Warning
+    items.push(
+      lintWarning(
+        new vscode.Range(0, 0, 0, Number.MAX_SAFE_INTEGER),
+        "Missing 'INCLUDE Irvine32.inc'. Irvine32 procedures will not be found without it.",
+        "missing-include"
+      )
     )
-    diag.code = "missing-include"
-    items.push(diag)
   }
 
   if (hasCode && !/^\s*END\b/im.test(text)) {
     const last = Math.max(0, document.lineCount - 1)
-    const diag = new vscode.Diagnostic(
-      new vscode.Range(last, 0, last, Number.MAX_SAFE_INTEGER),
-      "Missing 'END' directive at the end of the program.",
-      vscode.DiagnosticSeverity.Warning
+    items.push(
+      lintWarning(
+        new vscode.Range(last, 0, last, Number.MAX_SAFE_INTEGER),
+        "Missing 'END' directive at the end of the program.",
+        "missing-end"
+      )
     )
-    diag.code = "missing-end"
-    items.push(diag)
+  }
+
+  const main = parseSymbols(document).find(
+    (s) => s.kind === vscode.SymbolKind.Function && s.name.toLowerCase() === "main"
+  )
+  if (main && !/^\s*(exit\b|invoke\s+ExitProcess\b)/im.test(text)) {
+    items.push(
+      lintWarning(
+        new vscode.Range(main.line, main.character, main.line, Number.MAX_SAFE_INTEGER),
+        "main never calls 'exit', so the program will not return to Windows cleanly.",
+        "missing-exit"
+      )
+    )
   }
 
   for (const d of items) {
