@@ -374,6 +374,15 @@ async function insertGameCommand(): Promise<void> {
   await editor.edit((builder) => builder.replace(fullRange, code))
 }
 
+function findLine(document: vscode.TextDocument, re: RegExp): number {
+  for (let i = 0; i < document.lineCount; i++) {
+    if (re.test(stripComment(document.lineAt(i).text))) {
+      return i
+    }
+  }
+  return -1
+}
+
 function lintWarning(
   range: vscode.Range,
   message: string,
@@ -414,9 +423,8 @@ function lintDocument(document: vscode.TextDocument): void {
     )
   }
 
-  const main = parseSymbols(document).find(
-    (s) => s.kind === vscode.SymbolKind.Function && s.name.toLowerCase() === "main"
-  )
+  const procs = parseSymbols(document).filter((s) => s.kind === vscode.SymbolKind.Function)
+  const main = procs.find((s) => s.name.toLowerCase() === "main")
   if (main && !/^\s*(exit\b|invoke\s+ExitProcess\b)/im.test(text)) {
     items.push(
       lintWarning(
@@ -425,6 +433,22 @@ function lintDocument(document: vscode.TextDocument): void {
         "missing-exit"
       )
     )
+  }
+
+  const endLine = findLine(document, /^\s*END\s+[A-Za-z_@$?][\w@$?]*/i)
+  if (endLine >= 0 && procs.length > 0) {
+    const label = /^\s*END\s+([A-Za-z_@$?][\w@$?]*)/i.exec(
+      stripComment(document.lineAt(endLine).text)
+    )
+    if (label && !procs.some((p) => p.name.toLowerCase() === label[1].toLowerCase())) {
+      items.push(
+        lintWarning(
+          new vscode.Range(endLine, 0, endLine, Number.MAX_SAFE_INTEGER),
+          `'END ${label[1]}' does not name a procedure defined in this file.`,
+          "end-label"
+        )
+      )
+    }
   }
 
   for (const d of items) {
