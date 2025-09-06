@@ -451,6 +451,26 @@ function lintDocument(document: vscode.TextDocument): void {
     }
   }
 
+  const unclosed: { name: string; line: number }[] = []
+  for (let i = 0; i < document.lineCount; i++) {
+    const line = stripComment(document.lineAt(i).text)
+    const opened = /^\s*([A-Za-z_@$?][\w@$?]*)\s+PROC\b/i.exec(line)
+    if (opened) {
+      unclosed.push({ name: opened[1], line: i })
+    } else if (/^\s*[A-Za-z_@$?][\w@$?]*\s+ENDP\b/i.test(line)) {
+      unclosed.pop()
+    }
+  }
+  for (const open of unclosed) {
+    items.push(
+      lintWarning(
+        new vscode.Range(open.line, 0, open.line, Number.MAX_SAFE_INTEGER),
+        `Procedure '${open.name}' has no matching ENDP.`,
+        "missing-endp"
+      )
+    )
+  }
+
   for (const d of items) {
     d.source = "IrvRun"
   }
