@@ -471,6 +471,23 @@ function lintDocument(document: vscode.TextDocument): void {
     )
   }
 
+  const firstSeen = new Map<string, number>()
+  for (const sym of parseSymbols(document)) {
+    const key = sym.name.toLowerCase()
+    const first = firstSeen.get(key)
+    if (first === undefined) {
+      firstSeen.set(key, sym.line)
+      continue
+    }
+    items.push(
+      lintWarning(
+        new vscode.Range(sym.line, sym.character, sym.line, sym.character + sym.name.length),
+        `'${sym.name}' is already defined on line ${first + 1}.`,
+        "duplicate-symbol"
+      )
+    )
+  }
+
   for (const d of items) {
     d.source = "IrvRun"
   }
