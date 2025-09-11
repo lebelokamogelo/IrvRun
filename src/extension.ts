@@ -6,7 +6,7 @@ import * as vscode from "vscode"
 import { DIRECTIVES } from "./directives"
 import { INSTRUCTIONS, MNEMONICS } from "./instructions"
 import { IRVINE32_PROCS } from "./irvine32"
-import { REGISTERS } from "./registers"
+import { REGISTER_NAMES, REGISTERS } from "./registers"
 import { forgetSymbols, parseSymbols, stripComment } from "./symbols"
 
 let runTerminal: vscode.Terminal | undefined
@@ -484,6 +484,29 @@ function lintDocument(document: vscode.TextDocument): void {
         new vscode.Range(sym.line, sym.character, sym.line, sym.character + sym.name.length),
         `'${sym.name}' is already defined on line ${first + 1}.`,
         "duplicate-symbol"
+      )
+    )
+  }
+
+  const defined = new Set(parseSymbols(document).map((s) => s.name.toLowerCase()))
+  const library = new Set(IRVINE32_PROCS.map((p) => p.name.toLowerCase()))
+  for (let i = 0; i < document.lineCount; i++) {
+    const line = stripComment(document.lineAt(i).text).replace(/\s+$/, "")
+    const m = /^\s*(j[a-z]+|call|loop[a-z]*)\s+([A-Za-z_@$?][\w@$?]*)$/i.exec(line)
+    if (!m) {
+      continue
+    }
+    const target = m[2].toLowerCase()
+    // An indirect jump through a register is fine, and so is anything the
+    // library provides.
+    if (defined.has(target) || library.has(target) || REGISTER_NAMES.has(target)) {
+      continue
+    }
+    items.push(
+      lintWarning(
+        new vscode.Range(i, line.length - m[2].length, i, line.length),
+        `'${m[2]}' is not defined in this file and is not an Irvine32 procedure.`,
+        "unknown-target"
       )
     )
   }
