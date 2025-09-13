@@ -511,6 +511,23 @@ function lintDocument(document: vscode.TextDocument): void {
     )
   }
 
+  for (const sym of parseSymbols(document)) {
+    if (sym.kind !== vscode.SymbolKind.Variable) {
+      continue
+    }
+    if (findOccurrences(document, sym.name).length > 1) {
+      continue
+    }
+    items.push(
+      lintWarning(
+        new vscode.Range(sym.line, sym.character, sym.line, sym.character + sym.name.length),
+        `'${sym.name}' is declared but never used.`,
+        "unused-data",
+        vscode.DiagnosticSeverity.Information
+      )
+    )
+  }
+
   for (const d of items) {
     d.source = "IrvRun"
   }
