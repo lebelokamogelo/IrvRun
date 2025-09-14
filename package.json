@@ -76,6 +76,11 @@
           "type": "boolean",
           "default": true,
           "description": "Keep the console open after the program finishes by pausing until a key is pressed."
+        },
+        "irvrun.lint": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check open .asm files for common mistakes as you type."
         }
       }
     },

@@ -398,6 +398,10 @@ function lintDocument(document: vscode.TextDocument): void {
   if (document.languageId !== "asm") {
     return
   }
+  if (!vscode.workspace.getConfiguration("irvrun").get<boolean>("lint", true)) {
+    lintDiagnostics.delete(document.uri)
+    return
+  }
   const items: vscode.Diagnostic[] = []
   const text = document.getText()
   const hasCode = /^\s*\.code\b/im.test(text) || /\bPROC\b/i.test(text)
