@@ -13,7 +13,7 @@ let runTerminal: vscode.Terminal | undefined
 let output: vscode.OutputChannel
 let diagnostics: vscode.DiagnosticCollection
 let lintDiagnostics: vscode.DiagnosticCollection
-let lintTimer: ReturnType<typeof setTimeout> | undefined
+const lintTimers = new Map<string, ReturnType<typeof setTimeout>>()
 let extensionPath = ""
 
 const DEFAULT_MASM_PATH = "C:\\Masm615"
@@ -538,11 +538,30 @@ function lintDocument(document: vscode.TextDocument): void {
   lintDiagnostics.set(document.uri, items)
 }
 
+// One shared timer meant that typing in a second file cancelled the pending
+// lint of the first, so keep a timer per document instead.
 function scheduleLint(document: vscode.TextDocument): void {
-  if (lintTimer) {
-    clearTimeout(lintTimer)
+  const key = document.uri.toString()
+  const pending = lintTimers.get(key)
+  if (pending) {
+    clearTimeout(pending)
   }
-  lintTimer = setTimeout(() => lintDocument(document), 400)
+  lintTimers.set(
+    key,
+    setTimeout(() => {
+      lintTimers.delete(key)
+      lintDocument(document)
+    }, 400)
+  )
+}
+
+function cancelLint(document: vscode.TextDocument): void {
+  const key = document.uri.toString()
+  const pending = lintTimers.get(key)
+  if (pending) {
+    clearTimeout(pending)
+    lintTimers.delete(key)
+  }
 }
 
 function updateStatusBar(item: vscode.StatusBarItem): void {
@@ -1053,6 +1072,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidOpenTextDocument(lintDocument),
     vscode.workspace.onDidChangeTextDocument((e) => scheduleLint(e.document)),
     vscode.workspace.onDidCloseTextDocument((d) => {
+      cancelLint(d)
       lintDiagnostics.delete(d.uri)
       forgetSymbols(d)
     }),
