@@ -27,7 +27,7 @@
 ### Step 1: Download MASM615
 
 - Download MASM615 from the official bundle link:
-  [MASM615.zip](https://www.mediafire.com/file/kxd98uu0lf4brpj/Masm615.zip/file)
+  [MASM615.zip](https://we.tl/t-uO3LpVy3U9)
 
 - Extract the contents directly to your **C drive**, so the path becomes:
 
