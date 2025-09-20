@@ -1,3 +1,6 @@
+### 1.0.1 (2025-09-20)
+- Changed the masm615 download link as flag by mediafire.
+
 ### 1.0.0 (2025-08-03)
 
 - Initial release of lightweight runner for MASM615 with Irvine32 support
