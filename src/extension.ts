@@ -149,7 +149,8 @@ function assembleCommand(masmPath: string, name: string): string {
 }
 
 function linkCommand(masmPath: string, name: string): string {
-  return `"${path.join(masmPath, "LINK32.EXE")}" /nologo "${name}.obj" irvine32.lib kernel32.lib /SUBSYSTEM:CONSOLE /DEBUG /MAP`
+  const options = extraOptions("linkerOptions")
+  return `"${path.join(masmPath, "LINK32.EXE")}" /nologo "${name}.obj" irvine32.lib kernel32.lib /SUBSYSTEM:CONSOLE /DEBUG /MAP${options}`
 }
 
 function createBuildTask(fileUri: vscode.Uri): vscode.Task {
