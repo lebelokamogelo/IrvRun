@@ -138,8 +138,14 @@ function buildEnv(masmPath: string): { [key: string]: string } {
   return env
 }
 
+function extraOptions(key: string): string {
+  const value = (vscode.workspace.getConfiguration("irvrun").get<string>(key) || "").trim()
+  return value ? ` ${value}` : ""
+}
+
 function assembleCommand(masmPath: string, name: string): string {
-  return `"${path.join(masmPath, "ML.EXE")}" /nologo -Zi -c -Fl -Sg -coff "${name}.asm"`
+  const options = extraOptions("assemblerOptions")
+  return `"${path.join(masmPath, "ML.EXE")}" /nologo -Zi -c -Fl -Sg -coff${options} "${name}.asm"`
 }
 
 function linkCommand(masmPath: string, name: string): string {

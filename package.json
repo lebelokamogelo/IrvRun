@@ -81,6 +81,11 @@
           "type": "boolean",
           "default": true,
           "description": "Check open .asm files for common mistakes as you type."
+        },
+        "irvrun.assemblerOptions": {
+          "type": "string",
+          "default": "",
+          "description": "Extra command line options to pass to ML.EXE when assembling."
         }
       }
     },
