@@ -91,6 +91,11 @@
           "type": "string",
           "default": "",
           "description": "Extra command line options to pass to LINK32.EXE when linking."
+        },
+        "irvrun.showOutputOnBuild": {
+          "type": "boolean",
+          "default": true,
+          "description": "Reveal the IrvRun output panel after a build succeeds. Failures always reveal it."
         }
       }
     },

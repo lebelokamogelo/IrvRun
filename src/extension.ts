@@ -251,12 +251,15 @@ async function buildCommand(fileUri?: vscode.Uri): Promise<void> {
   }
   await saveIfOpen(file.fsPath)
   const ok = await build(file)
-  output.show(true)
-  if (ok) {
-    vscode.window.showInformationMessage("IrvRun: Build succeeded.")
-  } else {
+  if (!ok) {
+    output.show(true)
     vscode.window.showErrorMessage("IrvRun: Build failed. See the Problems panel.")
+    return
   }
+  if (vscode.workspace.getConfiguration("irvrun").get<boolean>("showOutputOnBuild", true)) {
+    output.show(true)
+  }
+  vscode.window.showInformationMessage("IrvRun: Build succeeded.")
 }
 
 function cleanCommand(fileUri?: vscode.Uri): void {
