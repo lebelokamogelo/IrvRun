@@ -195,6 +195,10 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
   // Terminate any leftover instance before rebuilding (harmless if none).
   await runProc(`taskkill /F /IM "${name}.exe"`, opts)
 
+  // Drop the previous .obj and .exe as well, so a failed assembly cannot leave
+  // the linker working from a stale object file.
+  removeBuildFiles(dir, name)
+
   output.appendLine(`> Assembling ${name}.asm`)
   const asm = await runProc(assembleCommand(masmPath, name), opts)
   output.append(asm.output)
@@ -262,16 +266,12 @@ async function buildCommand(fileUri?: vscode.Uri): Promise<void> {
   vscode.window.showInformationMessage("IrvRun: Build succeeded.")
 }
 
-function cleanCommand(fileUri?: vscode.Uri): void {
-  const file = resolveAsmFile(fileUri)
-  if (!file) {
-    return
-  }
-  const dir = path.dirname(file.fsPath)
-  const name = path.basename(file.fsPath, ".asm")
+const BUILD_ARTIFACTS = [".obj", ".exe", ".pdb", ".ilk", ".map", ".lst"]
+
+function removeBuildFiles(dir: string, name: string): { removed: number; locked: string[] } {
   let removed = 0
   const locked: string[] = []
-  for (const ext of [".obj", ".exe", ".pdb", ".ilk", ".map", ".lst"]) {
+  for (const ext of BUILD_ARTIFACTS) {
     const target = path.join(dir, name + ext)
     if (!fs.existsSync(target)) {
       continue
@@ -283,6 +283,17 @@ function cleanCommand(fileUri?: vscode.Uri): void {
       locked.push(name + ext)
     }
   }
+  return { removed, locked }
+}
+
+function cleanCommand(fileUri?: vscode.Uri): void {
+  const file = resolveAsmFile(fileUri)
+  if (!file) {
+    return
+  }
+  const dir = path.dirname(file.fsPath)
+  const name = path.basename(file.fsPath, ".asm")
+  const { removed, locked } = removeBuildFiles(dir, name)
   if (locked.length > 0) {
     vscode.window.showWarningMessage(
       `IrvRun: Removed ${removed} file(s); could not delete ${locked.join(", ")} (in use?).`
