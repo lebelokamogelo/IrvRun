@@ -14,6 +14,7 @@ let output: vscode.OutputChannel
 let diagnostics: vscode.DiagnosticCollection
 let lintDiagnostics: vscode.DiagnosticCollection
 const lintTimers = new Map<string, ReturnType<typeof setTimeout>>()
+let statusBar: vscode.StatusBarItem | undefined
 let extensionPath = ""
 
 const DEFAULT_MASM_PATH = "C:\\Masm615"
@@ -171,6 +172,15 @@ function createBuildTask(fileUri: vscode.Uri): vscode.Task {
   return task
 }
 
+async function buildWithStatus(fileUri: vscode.Uri): Promise<boolean> {
+  setBuilding(true)
+  try {
+    return await build(fileUri)
+  } finally {
+    setBuilding(false)
+  }
+}
+
 async function build(fileUri: vscode.Uri): Promise<boolean> {
   const filePath = fileUri.fsPath
   const dir = path.dirname(filePath)
@@ -239,7 +249,7 @@ async function runCommand(fileUri?: vscode.Uri): Promise<void> {
     return
   }
   await saveIfOpen(file.fsPath)
-  const ok = await build(file)
+  const ok = await buildWithStatus(file)
   if (ok) {
     runExecutable(file)
   } else {
@@ -254,7 +264,7 @@ async function buildCommand(fileUri?: vscode.Uri): Promise<void> {
     return
   }
   await saveIfOpen(file.fsPath)
-  const ok = await build(file)
+  const ok = await buildWithStatus(file)
   if (!ok) {
     output.show(true)
     vscode.window.showErrorMessage("IrvRun: Build failed. See the Problems panel.")
@@ -585,13 +595,26 @@ function cancelLint(document: vscode.TextDocument): void {
   }
 }
 
-function updateStatusBar(item: vscode.StatusBarItem): void {
+function updateStatusBar(): void {
+  if (!statusBar) {
+    return
+  }
   const editor = vscode.window.activeTextEditor
   if (editor && path.extname(editor.document.uri.fsPath).toLowerCase() === ".asm") {
-    item.show()
+    statusBar.show()
   } else {
-    item.hide()
+    statusBar.hide()
   }
+}
+
+function setBuilding(building: boolean): void {
+  if (!statusBar) {
+    return
+  }
+  statusBar.text = building ? "$(sync~spin) Building" : "$(play) Run MASM"
+  statusBar.tooltip = building
+    ? "IrvRun is assembling and linking this file"
+    : "Build and run this .asm file with IrvRun"
 }
 
 // Finds every mention of a symbol outside comments. MASM identifiers may
@@ -776,14 +799,10 @@ export function activate(context: vscode.ExtensionContext) {
   diagnostics = vscode.languages.createDiagnosticCollection("irvrun")
   lintDiagnostics = vscode.languages.createDiagnosticCollection("irvrun-lint")
 
-  const statusBar = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    100
-  )
-  statusBar.text = "$(play) Run MASM"
-  statusBar.tooltip = "Build and run this .asm file with IrvRun"
+  statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100)
   statusBar.command = "irvrun.run"
-  updateStatusBar(statusBar)
+  setBuilding(false)
+  updateStatusBar()
 
   const hover = vscode.languages.registerHoverProvider("asm", {
     provideHover(document, position) {
@@ -1089,7 +1108,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("irvrun.newFile", newFileCommand),
     vscode.commands.registerCommand("irvrun.insertGame", insertGameCommand),
     vscode.commands.registerCommand("irvrun.cheatSheet", cheatSheetCommand),
-    vscode.window.onDidChangeActiveTextEditor(() => updateStatusBar(statusBar)),
+    vscode.window.onDidChangeActiveTextEditor(() => updateStatusBar()),
     vscode.workspace.onDidOpenTextDocument(lintDocument),
     vscode.workspace.onDidChangeTextDocument((e) => scheduleLint(e.document)),
     vscode.workspace.onDidCloseTextDocument((d) => {
