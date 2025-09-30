@@ -190,6 +190,9 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
   const ml = path.join(masmPath, "ML.EXE")
   const link = path.join(masmPath, "LINK32.EXE")
 
+  const started = Date.now()
+  const elapsed = () => `${((Date.now() - started) / 1000).toFixed(1)}s`
+
   output.clear()
   if (!fs.existsSync(ml) || !fs.existsSync(link)) {
     output.appendLine(`> MASM tools not found in ${masmPath}`)
@@ -215,7 +218,7 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
 
   if (asm.code !== 0) {
     reportDiagnostics(fileUri, asm.output)
-    output.appendLine("\n> Assembly failed.")
+    output.appendLine(`\n> Assembly failed after ${elapsed()}.`)
     return false
   }
 
@@ -225,7 +228,9 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
   reportDiagnostics(fileUri, `${asm.output}\n${lnk.output}`)
 
   const ok = lnk.code === 0
-  output.appendLine(ok ? "\n> Build succeeded." : "\n> Build failed.")
+  output.appendLine(
+    ok ? `\n> Build succeeded in ${elapsed()}.` : `\n> Build failed after ${elapsed()}.`
+  )
   return ok
 }
 
