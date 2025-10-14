@@ -364,40 +364,76 @@ async function newFileCommand(): Promise<void> {
   await vscode.window.showTextDocument(doc)
 }
 
-interface GameItem extends vscode.QuickPickItem {
+interface SampleItem extends vscode.QuickPickItem {
   file: string
 }
 
-// Let the user pick a bundled showcase game and drop its source into the
-// active file, replacing whatever is there.
-async function insertGameCommand(): Promise<void> {
+const GAMES: SampleItem[] = [
+  {
+    label: "Snake",
+    description: "Grow by eating, avoid the walls and your own tail",
+    file: "snake.asm",
+  },
+  {
+    label: "Tic-Tac-Toe",
+    description: "Play X against a smart computer opponent",
+    file: "tictactoe.asm",
+  },
+]
+
+const EXAMPLES: SampleItem[] = [
+  {
+    label: "Fibonacci",
+    description: "Print the first N terms of the Fibonacci sequence",
+    file: "fibonacci.asm",
+  },
+  {
+    label: "Bubble Sort",
+    description: "Sort an array of random values in place",
+    file: "bubblesort.asm",
+  },
+  {
+    label: "Reverse a String",
+    description: "Read a line of text and write it back to front",
+    file: "reverse.asm",
+  },
+  {
+    label: "Prime Sieve",
+    description: "Find every prime up to 200 with a sieve",
+    file: "primes.asm",
+  },
+  {
+    label: "Temperature",
+    description: "Convert Fahrenheit to Celsius with integer arithmetic",
+    file: "temperature.asm",
+  },
+  {
+    label: "Binary Search",
+    description: "Look a value up in a sorted table",
+    file: "search.asm",
+  },
+]
+
+// Let the user pick a bundled program and drop its source into the active
+// file, replacing whatever is there.
+async function insertSample(
+  folder: string,
+  items: SampleItem[],
+  placeHolder: string,
+  noEditorMessage: string
+): Promise<void> {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
-    vscode.window.showErrorMessage("IrvRun: Open a file first, then insert a game.")
+    vscode.window.showErrorMessage(noEditorMessage)
     return
   }
-  const games: GameItem[] = [
-    {
-      label: "Snake",
-      description: "Grow by eating, avoid the walls and your own tail",
-      file: "snake.asm",
-    },
-    {
-      label: "Tic-Tac-Toe",
-      description: "Play X against a smart computer opponent",
-      file: "tictactoe.asm",
-    },
-  ]
-  const pick = await vscode.window.showQuickPick(games, {
-    placeHolder: "Choose a game to insert (this replaces the current file)",
-  })
+  const pick = await vscode.window.showQuickPick(items, { placeHolder })
   if (!pick) {
     return
   }
-  const gamePath = path.join(extensionPath, "games", pick.file)
   let code: string
   try {
-    code = fs.readFileSync(gamePath, "utf8")
+    code = fs.readFileSync(path.join(extensionPath, folder, pick.file), "utf8")
   } catch (e) {
     vscode.window.showErrorMessage(`IrvRun: Could not read ${pick.file}.`)
     return
@@ -408,6 +444,24 @@ async function insertGameCommand(): Promise<void> {
     doc.positionAt(doc.getText().length)
   )
   await editor.edit((builder) => builder.replace(fullRange, code))
+}
+
+function insertGameCommand(): Promise<void> {
+  return insertSample(
+    "games",
+    GAMES,
+    "Choose a game to insert (this replaces the current file)",
+    "IrvRun: Open a file first, then insert a game."
+  )
+}
+
+function insertExampleCommand(): Promise<void> {
+  return insertSample(
+    "examples",
+    EXAMPLES,
+    "Choose an example to insert (this replaces the current file)",
+    "IrvRun: Open a file first, then insert an example."
+  )
 }
 
 function findLine(document: vscode.TextDocument, re: RegExp): number {
@@ -1112,6 +1166,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("irvrun.checkSetup", checkSetupCommand),
     vscode.commands.registerCommand("irvrun.newFile", newFileCommand),
     vscode.commands.registerCommand("irvrun.insertGame", insertGameCommand),
+    vscode.commands.registerCommand("irvrun.insertExample", insertExampleCommand),
     vscode.commands.registerCommand("irvrun.cheatSheet", cheatSheetCommand),
     vscode.window.onDidChangeActiveTextEditor(() => updateStatusBar()),
     vscode.workspace.onDidOpenTextDocument(lintDocument),

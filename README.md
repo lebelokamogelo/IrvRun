@@ -44,6 +44,7 @@ Available from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd
 | `IrvRun: Clean Build Files` | Delete generated files (`.obj`, `.exe`, etc.). |
 | `IrvRun: New Program`   | Create a new file from the Irvine32 template.      |
 | `IrvRun: Insert Game`   | Drop a complete showcase game into the current file. |
+| `IrvRun: Insert Example` | Drop a short worked example into the current file. |
 | `IrvRun: Check Setup`   | Verify your MASM615 installation and PATH.         |
 | `IrvRun: Open Cheat Sheet` | Show register conventions, procedures, and instructions. |
 
