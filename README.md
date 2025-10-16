@@ -75,6 +75,19 @@ Type a prefix and press <kbd>Tab</kbd>:
 | `rand`     | Generate a random number             |
 | `exit`     | Exit the program cleanly             |
 
+## Example programs
+
+Short, focused programs that each demonstrate one idea. Open an `.asm` file, run **IrvRun: Insert Example**, and pick one.
+
+| Example            | Shows                                                       |
+| ------------------ | ----------------------------------------------------------- |
+| Fibonacci          | Input validation, `loop`, and building a series in registers |
+| Bubble Sort        | Arrays, `TYPE`, nested loops, and procedures                 |
+| Reverse a String   | `ReadString`, pointer arithmetic, and `WriteChar`            |
+| Prime Sieve        | Indexed addressing and crossing off multiples                |
+| Temperature        | Signed arithmetic with `cdq` and `idiv`                      |
+| Binary Search      | Scaled indexing and a procedure with a return value          |
+
 ## Showcase games
 
 IrvRun ships with complete, ready-to-run games written in Irvine32 assembly. They double as working examples of console I/O, keyboard input, and game loops.
