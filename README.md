@@ -118,6 +118,18 @@ Play against the computer. You are `X`, the computer is `O`. Empty squares show 
 | `R` | Play again |
 | `Q` | Quit |
 
+## Troubleshooting
+
+**"MASM not found"** — Run **IrvRun: Check Setup**. It lists exactly which of `ML.EXE`, `LINK32.EXE`, `Irvine32.inc`, and `Irvine32.lib` it could not find. Point `irvrun.masmPath` at the folder that holds `ML.EXE`.
+
+**The build fails with a linker error about the `.exe`** — The previous run is still open. IrvRun closes it for you before each build, but if a console window is stuck, close it and run again.
+
+**`A2006: undefined symbol`** — The file is missing `INCLUDE Irvine32.inc`, or a label is spelled differently from where it is defined. The editor underlines both cases before you build.
+
+**Nothing happens when I press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>** — The shortcut only applies to files VS Code has recognised as assembly. Check that the language shown in the status bar is `Irvine32`, and that the file is saved with an `.asm` extension.
+
+**The console closes before I can read the output** — Leave `irvrun.pauseAfterRun` on, or end your program with `call WaitMsg`.
+
 ## Developers
 
 Kamogelo Lebelo and Budeli Thabelo
