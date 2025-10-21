@@ -48,6 +48,18 @@ Available from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd
 | `IrvRun: Check Setup`   | Verify your MASM615 installation and PATH.         |
 | `IrvRun: Open Cheat Sheet` | Show register conventions, procedures, and instructions. |
 
+## Keyboard shortcuts
+
+| Shortcut | Action |
+| -------- | ------ |
+| <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> | Build and run the current file |
+| <kbd>F12</kbd> | Go to the definition of a label, variable, or procedure |
+| <kbd>Shift</kbd>+<kbd>F12</kbd> | Find every reference to the name under the cursor |
+| <kbd>F2</kbd> | Rename a label, variable, or procedure |
+| <kbd>Ctrl</kbd>+<kbd>.</kbd> | Apply a quick fix to the warning under the cursor |
+| <kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>F</kbd> | Reformat the file |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> | Jump to a symbol in the file |
+
 ## Settings
 
 | Setting                | Default       | Description                                      |
