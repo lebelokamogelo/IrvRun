@@ -65,7 +65,7 @@
         },
         {
           "name": "constant.language.register.pointer",
-          "match": "\\b((?i)(DI|SI|BP|SP|IP))\\b"
+          "match": "\\b((?i)(EDI|ESI|EBP|ESP|EIP|DI|SI|BP|SP|IP))\\b"
         },
         {
           "name": "constant.language.register.control",
