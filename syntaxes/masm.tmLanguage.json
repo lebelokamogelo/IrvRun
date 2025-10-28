@@ -161,7 +161,7 @@
         },
         {
           "name": "keyword.control.flow.jump",
-          "match": "\\b((?i)(JMP|JC|JNC|JZ|JNZ|JS|JNS|JP|JNP|JO|JNO|JA|JNA|JG|JGE|JL|JLE|JEXZ|JECXZ|JB|JNAE|JNB|JAE|JE|JNE|JPE|JPO|JA|JBE|JNLE|JNL|JNGE|JNG))\\b"
+          "match": "\\b((?i)(JMP|JC|JNC|JZ|JNZ|JS|JNS|JP|JNP|JO|JNO|JA|JNA|JG|JGE|JL|JLE|JCXZ|JECXZ|JB|JNAE|JNB|JAE|JE|JNE|JPE|JPO|JA|JBE|JNLE|JNL|JNGE|JNG))\\b"
         },
         {
           "name": "keyword.control.flow.loop",
@@ -217,7 +217,7 @@
         },
         {
           "name": "keyword.control.flag",
-          "match": "\\b((?i)(CLC|CTC|CMC|CLD|STD|CLI|STI))\\b"
+          "match": "\\b((?i)(CLC|STC|CMC|CLD|STD|CLI|STI))\\b"
         },
         {
           "name": "keyword.control.other",
