@@ -184,6 +184,14 @@
           "match": "\\b((?i)(TEST|BT[RSC]?))\\b"
         },
         {
+          "name": "keyword.control.set",
+          "match": "\\b((?i)(SET(N?[ABGLEZSOPC]|N?[ABGL]E|P[EO])))\\b"
+        },
+        {
+          "name": "keyword.control.DataMovement",
+          "match": "\\b((?i)(CMOV(N?[ABGLEZSOPC]|N?[ABGL]E|P[EO])))\\b"
+        },
+        {
           "name": "keyword.control.scan",
           "match": "\\b((?i)(BSF|BSR))\\b"
         },
