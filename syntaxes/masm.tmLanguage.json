@@ -36,6 +36,14 @@
           "match": "\\.((?i)(386|386P|387|486|486P|586|586P|686|686P|K3D|MMX|XMM))\\b"
         },
         {
+          "name": "keyword.control.directive.segment",
+          "match": "^\\s*\\.((?i)(data\\?|data|code|const|stack|model|startup|exit))\\b"
+        },
+        {
+          "name": "keyword.control.directive.module",
+          "match": "\\b((?i)(INCLUDE|INCLUDELIB|PUBLIC|EXTERN|EXTERNDEF|PROTO|INVOKE|OPTION|TITLE|SUBTITLE|END))\\b"
+        },
+        {
           "name": "constant.numeric",
           "match": "\\b([01]+B|[0-7]+[Qq]|[0-9][0-9A-Fa-f]*[Hh]|[0-9]+[Dd]?)\\b"
         },
