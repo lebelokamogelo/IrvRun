@@ -13,6 +13,9 @@
       "include": "#register"
     },
     {
+      "include": "#irvine32"
+    },
+    {
       "include": "#PseudoInstruction"
     },
     {
@@ -90,6 +93,14 @@
         {
           "name": "constant.language.register.float",
           "match": "\\b((?i)(R[0-7]))\\b"
+        }
+      ]
+    },
+    "irvine32": {
+      "patterns": [
+        {
+          "name": "support.function.irvine32",
+          "match": "\\b((?i)(CloseFile|Clrscr|CreateOutputFile|Crlf|Delay|DumpMem|DumpRegs|GetCommandTail|GetDateTime|GetMaxXY|GetMseconds|GetTextColor|Gotoxy|IsDigit|MsgBoxAsk|MsgBox|OpenInputFile|ParseDecimal32|ParseInteger32|Random32|RandomRange|Randomize|ReadChar|ReadDec|ReadFromFile|ReadHex|ReadInt|ReadKey|ReadString|SetTextColor|ShowFPUStack|StrLength|Str_compare|Str_copy|Str_length|Str_trim|Str_ucase|WaitMsg|WriteBinB|WriteBin|WriteChar|WriteDec|WriteHexB|WriteHex|WriteInt|WriteStackFrameName|WriteStackFrame|WriteString|WriteToFile|WriteWindowsMsg))\\b"
         }
       ]
     },
