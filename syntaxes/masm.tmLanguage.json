@@ -139,7 +139,7 @@
         },
         {
           "name": "keyword.operator.number",
-          "match": "\\b((?i)(SEG|OFFSET|ADDR|TYPE|LENGTH|SIZE))\\b"
+          "match": "\\b((?i)(SEG|OFFSET|ADDR|TYPE|LENGTHOF|SIZEOF|LENGTH|SIZE))\\b"
         },
         {
           "name": "keyword.operator.type",
