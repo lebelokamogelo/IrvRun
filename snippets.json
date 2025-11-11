@@ -89,5 +89,43 @@
       "; eax contains random number"
     ],
     "description": "Generate a random number"
+  },
+  "Read a line of text": {
+    "prefix": "reads",
+    "body": [
+      "mov edx, OFFSET ${1:buffer}",
+      "mov ecx, SIZEOF ${1:buffer} - 1",
+      "call ReadString",
+      "; eax holds the number of characters read"
+    ],
+    "description": "Read a line of text into a buffer"
+  },
+  "String length": {
+    "prefix": "strlen",
+    "body": [
+      "mov edx, OFFSET ${1:source}",
+      "call Str_length",
+      "; eax holds the length"
+    ],
+    "description": "Length of a null-terminated string"
+  },
+  "String copy": {
+    "prefix": "strcpy",
+    "body": [
+      "mov esi, OFFSET ${1:source}",
+      "mov edi, OFFSET ${2:destination}",
+      "call Str_copy"
+    ],
+    "description": "Copy a null-terminated string"
+  },
+  "String compare": {
+    "prefix": "strcmp",
+    "body": [
+      "mov esi, OFFSET ${1:first}",
+      "mov edi, OFFSET ${2:second}",
+      "call Str_compare",
+      "je ${3:equalLabel}"
+    ],
+    "description": "Compare two null-terminated strings"
   }
 }
