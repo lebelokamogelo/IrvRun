@@ -127,5 +127,52 @@
       "je ${3:equalLabel}"
     ],
     "description": "Compare two null-terminated strings"
+  },
+  "Create an output file": {
+    "prefix": "fcreate",
+    "body": [
+      "mov edx, OFFSET ${1:filename}",
+      "call CreateOutputFile",
+      "mov ${2:handle}, eax",
+      "cmp eax, INVALID_HANDLE_VALUE",
+      "je ${3:fileError}"
+    ],
+    "description": "Create a file for writing"
+  },
+  "Open an input file": {
+    "prefix": "fopen",
+    "body": [
+      "mov edx, OFFSET ${1:filename}",
+      "call OpenInputFile",
+      "mov ${2:handle}, eax",
+      "cmp eax, INVALID_HANDLE_VALUE",
+      "je ${3:fileError}"
+    ],
+    "description": "Open an existing file for reading"
+  },
+  "Write to a file": {
+    "prefix": "fwrite",
+    "body": [
+      "mov eax, ${1:handle}",
+      "mov edx, OFFSET ${2:buffer}",
+      "mov ecx, ${3:count}",
+      "call WriteToFile"
+    ],
+    "description": "Write a buffer to an open file"
+  },
+  "Read from a file": {
+    "prefix": "fread",
+    "body": [
+      "mov eax, ${1:handle}",
+      "mov edx, OFFSET ${2:buffer}",
+      "mov ecx, SIZEOF ${2:buffer}",
+      "call ReadFromFile"
+    ],
+    "description": "Read a block of bytes from an open file"
+  },
+  "Close a file": {
+    "prefix": "fclose",
+    "body": ["mov eax, ${1:handle}", "call CloseFile"],
+    "description": "Close an open file"
   }
 }
