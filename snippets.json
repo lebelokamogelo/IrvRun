@@ -174,5 +174,28 @@
     "prefix": "fclose",
     "body": ["mov eax, ${1:handle}", "call CloseFile"],
     "description": "Close an open file"
+  },
+  "Declare an array": {
+    "prefix": "array",
+    "body": ["${1:name} ${2|BYTE,WORD,DWORD,SDWORD|} ${3:count} DUP(${4:0})"],
+    "description": "Declare an array with DUP"
+  },
+  "Walk an array": {
+    "prefix": "walk",
+    "body": [
+      "mov ecx, LENGTHOF ${1:array}",
+      "mov esi, OFFSET ${1:array}",
+      "${2:nextItem}:",
+      "    mov eax, [esi]",
+      "    ${3:; work with eax here}",
+      "    add esi, TYPE ${1:array}",
+      "loop ${2:nextItem}"
+    ],
+    "description": "Walk an array with ESI"
+  },
+  "Indexed element": {
+    "prefix": "index",
+    "body": ["mov ${1:eax}, ${2:array}[${3:esi} * TYPE ${2:array}]"],
+    "description": "Read an array element with a scaled index"
   }
 }
