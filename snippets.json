@@ -197,5 +197,27 @@
     "prefix": "index",
     "body": ["mov ${1:eax}, ${2:array}[${3:esi} * TYPE ${2:array}]"],
     "description": "Read an array element with a scaled index"
+  },
+  "Jump table": {
+    "prefix": "jumptable",
+    "body": [
+      "; in .data:  ${1:handlers} DWORD ${2:first}, ${3:second}, ${4:third}",
+      "mov eax, ${5:choice}",
+      "cmp eax, LENGTHOF ${1:handlers}",
+      "jae ${6:outOfRange}",
+      "call ${1:handlers}[eax * TYPE ${1:handlers}]"
+    ],
+    "description": "Dispatch through a table of procedure addresses"
+  },
+  "Procedure with parameters": {
+    "prefix": "procp",
+    "body": [
+      "${1:name} PROC USES ${2:eax ebx}, ${3:first}:DWORD, ${4:second}:DWORD",
+      "    mov eax, ${3:first}",
+      "    ${5:; body}",
+      "    ret",
+      "${1:name} ENDP"
+    ],
+    "description": "Procedure with saved registers and named parameters"
   }
 }
