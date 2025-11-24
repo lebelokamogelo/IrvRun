@@ -130,6 +130,16 @@ Play against the computer. You are `X`, the computer is `O`. Empty squares show 
 | `R` | Play again |
 | `Q` | Quit |
 
+### Guess the Number
+
+The computer picks a number from 1 to 100 and you have seven guesses to find it. Each guess is answered with "too low" or "too high", and your best round is kept until you quit.
+
+| Key | Action |
+| --- | ------ |
+| `0`-`9` then <kbd>Enter</kbd> | Make a guess |
+| `R` | Play again |
+| `Q` | Quit |
+
 ## Troubleshooting
 
 **"MASM not found"** — Run **IrvRun: Check Setup**. It lists exactly which of `ML.EXE`, `LINK32.EXE`, `Irvine32.inc`, and `Irvine32.lib` it could not find. Point `irvrun.masmPath` at the folder that holds `ML.EXE`.

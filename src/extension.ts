@@ -379,6 +379,11 @@ const GAMES: SampleItem[] = [
     description: "Play X against a smart computer opponent",
     file: "tictactoe.asm",
   },
+  {
+    label: "Guess the Number",
+    description: "Track down the secret number in seven guesses",
+    file: "guess.asm",
+  },
 ]
 
 const EXAMPLES: SampleItem[] = [
