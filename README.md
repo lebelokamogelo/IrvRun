@@ -6,8 +6,10 @@ IrvRun is a Visual Studio Code extension that builds and runs MASM32 Assembly pr
 
 - Build and run `.asm` files with a single click.
 - Build errors and warnings shown in the Problems panel, linked to the exact line.
-- Hover help and autocomplete for Irvine32 procedures and x86 instructions.
-- Outline, breadcrumbs, and Go to Definition for your own labels, procedures, and variables.
+- Hover help and autocomplete for Irvine32 procedures, x86 instructions, registers, and directives.
+- Outline, breadcrumbs, Go to Definition, Find All References, and Rename for your own labels, procedures, and variables.
+- Warnings for a missing `exit`, an unclosed `PROC`, duplicate names, jumps to labels that do not exist, and unused data.
+- Folding for procedures and segments, signature help on `call`, and a Run code lens above `main`.
 - Syntax highlighting, comment toggling, bracket matching, and auto-indent.
 - Snippets for common patterns and a built-in cheat sheet.
 
@@ -66,6 +68,10 @@ Available from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd
 | ---------------------- | ------------- | ------------------------------------------------ |
 | `irvrun.masmPath`      | `C:\Masm615`  | Path to your MASM615 installation.               |
 | `irvrun.pauseAfterRun` | `true`        | Keep the console open after the program finishes. |
+| `irvrun.lint`          | `true`        | Check open files for common mistakes as you type. |
+| `irvrun.showOutputOnBuild` | `true`    | Reveal the output panel after a build succeeds.   |
+| `irvrun.assemblerOptions` | `""`       | Extra options passed to `ML.EXE`.                 |
+| `irvrun.linkerOptions` | `""`          | Extra options passed to `LINK32.EXE`.             |
 
 ## Snippets
 
@@ -86,6 +92,20 @@ Type a prefix and press <kbd>Tab</kbd>:
 | `datetime` | Get the system date and time         |
 | `rand`     | Generate a random number             |
 | `exit`     | Exit the program cleanly             |
+| `reads`    | Read a line of text into a buffer    |
+| `strlen`   | Length of a null-terminated string   |
+| `strcpy`   | Copy a string                        |
+| `strcmp`   | Compare two strings                  |
+| `fcreate`  | Create a file for writing            |
+| `fopen`    | Open a file for reading              |
+| `fwrite`   | Write a buffer to a file             |
+| `fread`    | Read a block from a file             |
+| `fclose`   | Close a file                         |
+| `array`    | Declare an array with `DUP`          |
+| `walk`     | Walk an array with `ESI`             |
+| `index`    | Read an element with a scaled index  |
+| `jumptable`| Dispatch through a table of procedures |
+| `procp`    | Procedure with saved registers and parameters |
 
 ## Example programs
 
