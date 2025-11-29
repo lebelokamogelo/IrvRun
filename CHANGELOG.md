@@ -1,3 +1,25 @@
+### 1.3.0 (2026-08-28)
+
+Added
+- Reference data for every general purpose register, assembler directive, and the rest of the x86 instruction set, wired into hover, autocomplete, and the cheat sheet.
+- Signature help on `call`, occurrence highlighting, folding for procedures and segments, Rename, and Find All References.
+- A Run code lens above `main` and an IrvRun build task.
+- Six worked examples and an Insert Example command that drops one into the current file.
+- Guess the Number showcase game.
+- Warnings for a missing `exit`, an `END` label that names nothing, an unclosed `PROC`, duplicate names, jumps and calls to names that do not exist, and unused data. The first two come with quick fixes.
+- `irvrun.lint`, `irvrun.showOutputOnBuild`, `irvrun.assemblerOptions`, and `irvrun.linkerOptions` settings.
+- Snippets for the string library, file input and output, arrays, and jump tables.
+- Contributing guide, plus troubleshooting and keyboard shortcut sections in the README.
+
+Changed
+- Stale `.obj` and `.exe` files are deleted before assembling, so a failed build can no longer link against an old object file.
+- The status bar shows build progress and the output panel reports how long the build took.
+- Parsed symbols are cached per document version instead of being recomputed on every request.
+
+Fixed
+- Each open file now has its own lint timer, so typing in one file no longer cancels the pending check of another.
+- Corrected the `STC` and `JCXZ` mnemonics in the syntax grammar, and highlighted `ESI`, `EDI`, `EBP`, and `ESP`.
+
 ### 1.2.0 (2026-07-28)
 
 Added

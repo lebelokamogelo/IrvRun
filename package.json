@@ -2,7 +2,7 @@
   "name": "irvrun",
   "displayName": "IrvRun",
   "description": "Run MASM32 Assembly code using Irvine32 with one click.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "lebelokamogelo",
   "icon": "images/icon.png",
   "repository": {
