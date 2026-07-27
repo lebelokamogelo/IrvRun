@@ -43,6 +43,7 @@ Available from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd
 | `IrvRun: Build MASM Code` | Build without running, reporting any errors.     |
 | `IrvRun: Clean Build Files` | Delete generated files (`.obj`, `.exe`, etc.). |
 | `IrvRun: New Program`   | Create a new file from the Irvine32 template.      |
+| `IrvRun: Insert Game`   | Drop a complete showcase game into the current file. |
 | `IrvRun: Check Setup`   | Verify your MASM615 installation and PATH.         |
 | `IrvRun: Open Cheat Sheet` | Show register conventions, procedures, and instructions. |
 
@@ -73,9 +74,35 @@ Type a prefix and press <kbd>Tab</kbd>:
 | `rand`     | Generate a random number             |
 | `exit`     | Exit the program cleanly             |
 
-## Notes
+## Showcase games
 
-Windows only. Supports 32-bit MASM and Irvine32. If a build fails to find the tools, run **IrvRun: Check Setup** and confirm `irvrun.masmPath` points to your MASM615 folder.
+IrvRun ships with complete, ready-to-run games written in Irvine32 assembly. They double as working examples of console I/O, keyboard input, and game loops.
+
+**To try one:**
+
+1. Open an `.asm` file.
+2. Run **IrvRun: Insert Game** from the Command Palette and pick a game. Its full source replaces the current file, so use an empty or throwaway file.
+3. Run it with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>.
+
+### Snake
+
+Steer the snake into the food to grow and score. Hitting a wall or your own tail ends the round. Your best score is kept until you close the game.
+
+| Key | Action |
+| --- | ------ |
+| Arrow keys or `W` `A` `S` `D` | Steer |
+| `R` | Play again after game over |
+| `Q` | Quit |
+
+### Tic-Tac-Toe
+
+Play against the computer. You are `X`, the computer is `O`. Empty squares show their number, so type `1`-`9` to place your mark. The computer takes any winning move, blocks yours, then prefers the center, corners, and sides, which makes it very hard to beat.
+
+| Key | Action |
+| --- | ------ |
+| `1`-`9` then <kbd>Enter</kbd> | Place your mark |
+| `R` | Play again |
+| `Q` | Quit |
 
 ## Developers
 
