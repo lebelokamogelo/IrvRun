@@ -1,0 +1,167 @@
+"use strict"
+
+export interface Irvine32Proc {
+  name: string
+  summary: string
+  receives: string
+  returns: string
+}
+
+export const IRVINE32_PROCS: Irvine32Proc[] = [
+  {
+    name: "Clrscr",
+    summary: "Clears the console window and locates the cursor at the top left.",
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
+    name: "Crlf",
+    summary: "Writes an end-of-line sequence to the console (moves to a new line).",
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
+    name: "Delay",
+    summary: "Pauses the program for a given number of milliseconds.",
+    receives: "EAX = number of milliseconds.",
+    returns: "Nothing.",
+  },
+  {
+    name: "DumpMem",
+    summary: "Writes a range of memory to the console in hexadecimal.",
+    receives: "ESI = start address, ECX = number of units, EBX = unit size in bytes.",
+    returns: "Nothing.",
+  },
+  {
+    name: "DumpRegs",
+    summary: "Displays the EAX, EBX, ECX, EDX, ESI, EDI, EBP, ESP registers and flags.",
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
+    name: "GetDateTime",
+    summary: "Gets the current system date and time.",
+    receives: "EDX = offset of a 64-bit SYSTEMTIME structure.",
+    returns: "The structure is filled in.",
+  },
+  {
+    name: "Gotoxy",
+    summary: "Moves the cursor to a given row and column in the console window.",
+    receives: "DH = row (Y), DL = column (X).",
+    returns: "Nothing.",
+  },
+  {
+    name: "MsgBox",
+    summary: "Displays a popup message box.",
+    receives: "EDX = offset of the message, EBX = offset of the title (or 0).",
+    returns: "Nothing.",
+  },
+  {
+    name: "ParseInteger32",
+    summary: "Converts a string of digits into a 32-bit signed integer.",
+    receives: "EDX = offset of the string, ECX = string length.",
+    returns: "EAX = the integer value.",
+  },
+  {
+    name: "Random32",
+    summary: "Generates a 32-bit pseudo-random integer.",
+    receives: "Nothing.",
+    returns: "EAX = random integer in the range 0 to FFFFFFFFh.",
+  },
+  {
+    name: "RandomRange",
+    summary: "Generates a pseudo-random integer within a range.",
+    receives: "EAX = upper bound (exclusive).",
+    returns: "EAX = random integer in the range 0 to (N - 1).",
+  },
+  {
+    name: "Randomize",
+    summary: "Seeds the random number generator from the system time.",
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
+    name: "ReadChar",
+    summary: "Waits for a single character to be typed and returns it.",
+    receives: "Nothing.",
+    returns: "AL = the character (not echoed to the screen).",
+  },
+  {
+    name: "ReadDec",
+    summary: "Reads an unsigned 32-bit decimal integer from the keyboard.",
+    receives: "Nothing.",
+    returns: "EAX = the value entered.",
+  },
+  {
+    name: "ReadHex",
+    summary: "Reads a 32-bit hexadecimal integer from the keyboard.",
+    receives: "Nothing.",
+    returns: "EAX = the value entered.",
+  },
+  {
+    name: "ReadInt",
+    summary: "Reads a signed 32-bit integer from the keyboard.",
+    receives: "Nothing.",
+    returns: "EAX = the value entered (CF set on overflow).",
+  },
+  {
+    name: "ReadString",
+    summary: "Reads a line of text from the keyboard into a buffer.",
+    receives: "EDX = offset of the buffer, ECX = max characters to read + 1.",
+    returns: "EAX = count of characters read.",
+  },
+  {
+    name: "SetTextColor",
+    summary: "Sets the foreground and background color for console text.",
+    receives: "EAX = (background * 16) + foreground.",
+    returns: "Nothing.",
+  },
+  {
+    name: "StrLength",
+    summary: "Returns the length of a null-terminated string.",
+    receives: "EDX = offset of the string.",
+    returns: "EAX = the length in bytes.",
+  },
+  {
+    name: "WaitMsg",
+    summary: 'Displays "Press any key..." and waits for a key press.',
+    receives: "Nothing.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteBin",
+    summary: "Writes an integer to the console in binary (ASCII).",
+    receives: "EAX = the value to write.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteChar",
+    summary: "Writes a single character to the console.",
+    receives: "AL = the character.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteDec",
+    summary: "Writes an unsigned 32-bit integer to the console in decimal.",
+    receives: "EAX = the value to write.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteHex",
+    summary: "Writes a 32-bit integer to the console in hexadecimal.",
+    receives: "EAX = the value to write.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteInt",
+    summary: "Writes a signed 32-bit integer to the console in decimal.",
+    receives: "EAX = the value to write.",
+    returns: "Nothing.",
+  },
+  {
+    name: "WriteString",
+    summary: "Writes a null-terminated string to the console.",
+    receives: "EDX = offset of the string.",
+    returns: "Nothing.",
+  },
+]

@@ -1,0 +1,62 @@
+"use strict"
+
+export interface Instruction {
+  name: string
+  summary: string
+}
+
+export const INSTRUCTIONS: Instruction[] = [
+  { name: "mov", summary: "Copies the source operand to the destination. `mov dest, src`" },
+  { name: "movzx", summary: "Moves a smaller value into a larger register, filling with zeros." },
+  { name: "movsx", summary: "Moves a smaller value into a larger register, preserving the sign." },
+  { name: "xchg", summary: "Exchanges the contents of two operands." },
+  { name: "lea", summary: "Loads the effective address of the source into the destination." },
+  { name: "push", summary: "Pushes a value onto the stack." },
+  { name: "pop", summary: "Pops the top value off the stack into the operand." },
+  { name: "add", summary: "Adds the source to the destination. `add dest, src`" },
+  { name: "sub", summary: "Subtracts the source from the destination. `sub dest, src`" },
+  { name: "inc", summary: "Increments the operand by one." },
+  { name: "dec", summary: "Decrements the operand by one." },
+  { name: "mul", summary: "Unsigned multiply of EAX by the operand (result in EDX:EAX)." },
+  { name: "imul", summary: "Signed multiply." },
+  { name: "div", summary: "Unsigned divide of EDX:EAX by the operand (quotient in EAX, remainder in EDX)." },
+  { name: "idiv", summary: "Signed divide of EDX:EAX by the operand." },
+  { name: "neg", summary: "Replaces the operand with its two's complement (negates it)." },
+  { name: "cmp", summary: "Compares two operands by subtracting and setting flags. `cmp a, b`" },
+  { name: "and", summary: "Bitwise AND of the two operands." },
+  { name: "or", summary: "Bitwise OR of the two operands." },
+  { name: "xor", summary: "Bitwise exclusive OR. `xor eax, eax` zeroes a register." },
+  { name: "not", summary: "Bitwise NOT (inverts every bit)." },
+  { name: "test", summary: "Bitwise AND that sets flags without storing the result." },
+  { name: "shl", summary: "Shifts bits left, filling with zeros (multiplies by 2 each shift)." },
+  { name: "shr", summary: "Shifts bits right, filling with zeros (unsigned divide by 2)." },
+  { name: "sal", summary: "Arithmetic shift left (same as shl)." },
+  { name: "sar", summary: "Arithmetic shift right, preserving the sign bit." },
+  { name: "rol", summary: "Rotates bits left." },
+  { name: "ror", summary: "Rotates bits right." },
+  { name: "jmp", summary: "Unconditional jump to a label." },
+  { name: "je", summary: "Jump if equal (ZF = 1). Same as jz." },
+  { name: "jne", summary: "Jump if not equal (ZF = 0). Same as jnz." },
+  { name: "jz", summary: "Jump if zero (ZF = 1)." },
+  { name: "jnz", summary: "Jump if not zero (ZF = 0)." },
+  { name: "jg", summary: "Jump if greater (signed)." },
+  { name: "jge", summary: "Jump if greater or equal (signed)." },
+  { name: "jl", summary: "Jump if less (signed)." },
+  { name: "jle", summary: "Jump if less or equal (signed)." },
+  { name: "ja", summary: "Jump if above (unsigned)." },
+  { name: "jae", summary: "Jump if above or equal (unsigned)." },
+  { name: "jb", summary: "Jump if below (unsigned)." },
+  { name: "jbe", summary: "Jump if below or equal (unsigned)." },
+  { name: "jc", summary: "Jump if carry flag set." },
+  { name: "jnc", summary: "Jump if carry flag clear." },
+  { name: "jo", summary: "Jump if overflow flag set." },
+  { name: "js", summary: "Jump if sign flag set (result negative)." },
+  { name: "loop", summary: "Decrements ECX and jumps to the label while ECX is not zero." },
+  { name: "call", summary: "Calls a procedure, pushing the return address." },
+  { name: "ret", summary: "Returns from a procedure." },
+  { name: "cdq", summary: "Sign-extends EAX into EDX:EAX (used before idiv)." },
+  { name: "nop", summary: "No operation." },
+  { name: "int", summary: "Software interrupt." },
+]
+
+export const MNEMONICS: Set<string> = new Set(INSTRUCTIONS.map((i) => i.name.toLowerCase()))
