@@ -12,6 +12,7 @@ let output: vscode.OutputChannel
 let diagnostics: vscode.DiagnosticCollection
 let lintDiagnostics: vscode.DiagnosticCollection
 let lintTimer: ReturnType<typeof setTimeout> | undefined
+let extensionPath = ""
 
 const DEFAULT_MASM_PATH = "C:\\Masm615"
 
@@ -145,6 +146,10 @@ async function build(fileUri: vscode.Uri): Promise<boolean> {
     )
     return false
   }
+
+  // A previous run may still be holding the .exe, which blocks the linker.
+  // Terminate any leftover instance before rebuilding (harmless if none).
+  await runProc(`taskkill /F /IM "${name}.exe"`, opts)
 
   output.appendLine(`> Assembling ${name}.asm`)
   const asm = await runProc(
@@ -290,6 +295,52 @@ async function newFileCommand(): Promise<void> {
     content: PROGRAM_TEMPLATE,
   })
   await vscode.window.showTextDocument(doc)
+}
+
+interface GameItem extends vscode.QuickPickItem {
+  file: string
+}
+
+// Let the user pick a bundled showcase game and drop its source into the
+// active file, replacing whatever is there.
+async function insertGameCommand(): Promise<void> {
+  const editor = vscode.window.activeTextEditor
+  if (!editor) {
+    vscode.window.showErrorMessage("IrvRun: Open a file first, then insert a game.")
+    return
+  }
+  const games: GameItem[] = [
+    {
+      label: "Snake",
+      description: "Grow by eating, avoid the walls and your own tail",
+      file: "snake.asm",
+    },
+    {
+      label: "Tic-Tac-Toe",
+      description: "Play X against a smart computer opponent",
+      file: "tictactoe.asm",
+    },
+  ]
+  const pick = await vscode.window.showQuickPick(games, {
+    placeHolder: "Choose a game to insert (this replaces the current file)",
+  })
+  if (!pick) {
+    return
+  }
+  const gamePath = path.join(extensionPath, "games", pick.file)
+  let code: string
+  try {
+    code = fs.readFileSync(gamePath, "utf8")
+  } catch (e) {
+    vscode.window.showErrorMessage(`IrvRun: Could not read ${pick.file}.`)
+    return
+  }
+  const doc = editor.document
+  const fullRange = new vscode.Range(
+    doc.positionAt(0),
+    doc.positionAt(doc.getText().length)
+  )
+  await editor.edit((builder) => builder.replace(fullRange, code))
 }
 
 function lintDocument(document: vscode.TextDocument): void {
@@ -455,6 +506,7 @@ function cheatSheetCommand(): void {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+  extensionPath = context.extensionPath
   output = vscode.window.createOutputChannel("IrvRun")
   diagnostics = vscode.languages.createDiagnosticCollection("irvrun")
   lintDiagnostics = vscode.languages.createDiagnosticCollection("irvrun-lint")
@@ -574,6 +626,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("irvrun.clean", cleanCommand),
     vscode.commands.registerCommand("irvrun.checkSetup", checkSetupCommand),
     vscode.commands.registerCommand("irvrun.newFile", newFileCommand),
+    vscode.commands.registerCommand("irvrun.insertGame", insertGameCommand),
     vscode.commands.registerCommand("irvrun.cheatSheet", cheatSheetCommand),
     vscode.window.onDidChangeActiveTextEditor(() => updateStatusBar(statusBar)),
     vscode.workspace.onDidOpenTextDocument(lintDocument),

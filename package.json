@@ -54,6 +54,11 @@
         "category": "IrvRun"
       },
       {
+        "command": "irvrun.insertGame",
+        "title": "Insert Game",
+        "category": "IrvRun"
+      },
+      {
         "command": "irvrun.cheatSheet",
         "title": "Open Cheat Sheet",
         "category": "IrvRun"
