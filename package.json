@@ -23,7 +23,7 @@
   ],
   "main": "./out/src/extension",
   "activationEvents": [
-    "onCommand:extension.irvrun"
+    "onCommand:code-runner.run"
   ],
   "contributes": {
     "commands": [
@@ -83,10 +83,6 @@
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -watch -p ./"
-  },
-  "dependencies": {
-    "applicationinsights": "^3.8.0",
-    "micromatch": "^4.0.2"
   },
   "devDependencies": {
     "@types/node": "^6.0.40",
