@@ -2,7 +2,7 @@
   "name": "irvrun",
   "displayName": "IrvRun",
   "description": "Run MASM32 Assembly code using Irvine32 with one click.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "lebelokamogelo",
   "icon": "images/icon.png",
   "repository": {
@@ -23,32 +23,88 @@
   ],
   "main": "./out/src/extension",
   "activationEvents": [
-    "onCommand:code-runner.run"
+    "onLanguage:asm"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "code-runner.run",
+        "command": "irvrun.run",
         "title": "Run MASM Code",
+        "category": "IrvRun",
         "icon": "$(play)"
+      },
+      {
+        "command": "irvrun.build",
+        "title": "Build MASM Code",
+        "category": "IrvRun"
+      },
+      {
+        "command": "irvrun.clean",
+        "title": "Clean Build Files",
+        "category": "IrvRun"
+      },
+      {
+        "command": "irvrun.checkSetup",
+        "title": "Check Setup",
+        "category": "IrvRun"
+      },
+      {
+        "command": "irvrun.newFile",
+        "title": "New Program",
+        "category": "IrvRun"
+      },
+      {
+        "command": "irvrun.cheatSheet",
+        "title": "Open Cheat Sheet",
+        "category": "IrvRun"
       }
     ],
+    "configuration": {
+      "title": "IrvRun",
+      "properties": {
+        "irvrun.masmPath": {
+          "type": "string",
+          "default": "C:\\Masm615",
+          "description": "Path to your MASM615 installation (the folder containing ml.exe, link.exe, and make32.bat)."
+        },
+        "irvrun.pauseAfterRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Keep the console open after the program finishes by pausing until a key is pressed."
+        }
+      }
+    },
     "keybindings": [
       {
-        "command": "code-runner.run",
-        "key": "ctrl+alt+n"
+        "command": "irvrun.run",
+        "key": "ctrl+alt+n",
+        "when": "editorLangId == asm"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "code-runner.run",
+          "command": "irvrun.run",
+          "when": "resourceExtname == .asm",
+          "group": "navigation"
+        },
+        {
+          "command": "irvrun.build",
+          "when": "resourceExtname == .asm",
           "group": "navigation"
         }
       ],
       "editor/title/run": [
         {
-          "command": "code-runner.run",
+          "command": "irvrun.run",
+          "when": "resourceExtname == .asm",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "irvrun.run",
+          "when": "resourceExtname == .asm",
           "group": "navigation"
         }
       ]
@@ -63,7 +119,8 @@
           "Irvine32",
           "MASM",
           "asm"
-        ]
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -85,7 +142,7 @@
     "compile": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^6.0.40",
+    "@types/node": "^20.11.0",
     "@types/vscode": "^1.56.0",
     "typescript": "^5.9.2"
   }

@@ -1,6 +1,6 @@
 {
   "Program skeleton": {
-    "prefix": "skeleton",
+    "prefix": "template",
     "body": [
       "INCLUDE Irvine32.inc",
       "",
