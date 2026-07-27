@@ -1,101 +1,82 @@
-# **IrvRun**
+# IrvRun
 
-**IrvRun** is a lightweight Visual Studio Code extension that lets you run MASM32 Assembly code using **Irvine32** with a single click. It streamlines the workflow for writing, building, and executing `.asm` files — making Irvine32 development fast, clean, and beginner-friendly with no manual setup required.
-
----
-
-## Developers
-
-- **Kamogelo Lebelo**
-- **Budeli Thabelo**
-
----
+IrvRun is a Visual Studio Code extension that builds and runs MASM32 Assembly programs written with the Irvine32 library. It compiles and launches your `.asm` file in one click, turning a multi-step build into a single action.
 
 ## Features
 
-- **One-click run**: Instantly build and execute `.asm` files from the editor.
-- **Automatic build & run**: Uses `make32` to compile and run programs.
-- **Enhanced syntax highlighting**: Tailored for Irvine32-style MASM code.
-- **Built-in snippets**: Insert frequently used patterns with a shortcut.
-- **Run from file explorer or editor**: Supports running files from both locations.
-- **Integrated terminal output**: See build and runtime output in the VS Code terminal.
+- Build and run `.asm` files with a single click.
+- Build errors and warnings shown in the Problems panel, linked to the exact line.
+- Hover help and autocomplete for Irvine32 procedures and x86 instructions.
+- Outline, breadcrumbs, and Go to Definition for your own labels, procedures, and variables.
+- Syntax highlighting, comment toggling, bracket matching, and auto-indent.
+- Snippets for common patterns and a built-in cheat sheet.
 
----
+## Installation
 
-## Installation Requirements
+**1. Download MASM615**
 
-### Step 1: Download MASM615
+Download MASM615 and extract it so the tools sit directly in `C:\Masm615`.
 
-- Download MASM615 from the official bundle link:
-  [MASM615.zip](https://we.tl/t-uO3LpVy3U9)
+**2. Install the extension**
 
-- Extract the contents directly to your **C drive**, so the path becomes:
+In VS Code, open the Extensions view (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>), search for `IrvRun`, and click **Install**.
 
-  ```
-  C:\Masm615
-  ```
+**3. Confirm the setup**
 
-> **Do not rename or relocate the folder.** IrvRun expects MASM615 to be located exactly at `C:\Masm615`.
+Run **IrvRun: Check Setup** from the Command Palette. If your MASM615 is somewhere other than `C:\Masm615`, set the `irvrun.masmPath` setting to point to it. You do not need to edit your system PATH.
 
----
+## Usage
 
-### Step 2: Set the PATH Environment Variable
+Open an `.asm` file and run it with any of these:
 
-To allow your system (and VS Code) to recognize MASM tools like `ml.exe` and `link.exe`, add `C:\Masm615` to your system PATH:
+- Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>.
+- Click the **Run MASM** button in the status bar or the title bar.
+- Right-click the file and choose **Run MASM Code**.
 
-1. Press <kbd>Windows</kbd> and search for **Environment Variables**.
-2. Click **Edit the system environment variables**.
-3. In the **System Properties** window, click **Environment Variables…**
-4. Under **System variables**, select the `Path` variable and click **Edit**.
-5. Click **New**, then add:
+## Commands
 
-   ```
-   C:\Masm615
-   ```
+Available from the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>):
 
-6. Click **OK** to save all changes.
+| Command                 | Description                                       |
+| ----------------------- | ------------------------------------------------- |
+| `IrvRun: Run MASM Code` | Build and run the current file.                   |
+| `IrvRun: Build MASM Code` | Build without running, reporting any errors.     |
+| `IrvRun: Clean Build Files` | Delete generated files (`.obj`, `.exe`, etc.). |
+| `IrvRun: New Program`   | Create a new file from the Irvine32 template.      |
+| `IrvRun: Check Setup`   | Verify your MASM615 installation and PATH.         |
+| `IrvRun: Open Cheat Sheet` | Show register conventions, procedures, and instructions. |
 
-> ✅ After this, your system will be able to run MASM tools globally from any terminal or VS Code instance.
+## Settings
 
----
+| Setting                | Default       | Description                                      |
+| ---------------------- | ------------- | ------------------------------------------------ |
+| `irvrun.masmPath`      | `C:\Masm615`  | Path to your MASM615 installation.               |
+| `irvrun.pauseAfterRun` | `true`        | Keep the console open after the program finishes. |
 
-### Step 3: Install IrvRun Extension
+## Snippets
 
-1. Open **Visual Studio Code**.
-2. Press <kbd>Ctrl+Shift+X</kbd> to open the Extensions view.
-3. Search for `IrvRun` and click **Install**.
+Type a prefix and press <kbd>Tab</kbd>:
 
-Once installed, you can run `.asm` files directly from the editor or right-click in the file explorer.
-
----
-
-## Code Snippets
-
-Use these helpful Irvine32 snippets by typing the prefix and pressing <kbd>Tab</kbd>:
-
-| Prefix     | Description                            |
-| ---------- | -------------------------------------- |
-| `skeleton` | Basic MASM program with Irvine32 setup |
-| `writes`   | Print a string using `WriteString`     |
-| `writei`   | Print an integer using `WriteInt`      |
-| `readi`    | Read an integer using `ReadInt`        |
-| `exit`     | Exit the program cleanly               |
-
----
+| Prefix     | Description                          |
+| ---------- | ------------------------------------ |
+| `template` | Basic Irvine32 program template      |
+| `writes`   | Print a string with `WriteString`    |
+| `writei`   | Print an integer with `WriteInt`     |
+| `readi`    | Read an integer with `ReadInt`       |
+| `proc`     | Define a procedure                   |
+| `loop`     | Loop using `ECX`                     |
+| `ifelse`   | Compare and branch with `CMP`        |
+| `data`     | Declare a variable in `.data`        |
+| `cls`      | Clear the screen                     |
+| `crlf`     | Print a new line                     |
+| `datetime` | Get the system date and time         |
+| `rand`     | Generate a random number             |
+| `exit`     | Exit the program cleanly             |
 
 ## Notes
 
-- Make sure `ml.exe`, `link.exe`, `Irvine32.lib`, and other required files exist in the correct subfolders inside `C:\Masm615`.
-- Only 32-bit MASM and Irvine32 are supported.
-- If you see errors like "command not found" or "linker not found", double-check your PATH setup.
-- Restart VS Code after editing environment variables to ensure changes are picked up.
+Windows only. Supports 32-bit MASM and Irvine32. If a build fails to find the tools, run **IrvRun: Check Setup** and confirm `irvrun.masmPath` points to your MASM615 folder.
 
----
+## Developers
 
-## Troubleshooting
-
-| Issue                         | Solution                                                         |
-| ----------------------------- | ---------------------------------------------------------------- |
-| `ml` or `link` not recognized | Ensure `C:\Masm615` is correctly added to the system PATH.       |
-| Build fails with `.lib` error | Confirm `Irvine32.lib` is present in `C:\Masm615\LIB`.           |
-| No output in terminal         | Check that the Run action is executing the expected `.exe` file. |
+Kamogelo Lebelo and Budeli Thabelo
