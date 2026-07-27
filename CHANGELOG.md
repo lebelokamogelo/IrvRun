@@ -1,3 +1,12 @@
+### 1.2.0 (2026-07-28)
+
+Added
+- Showcase games written in Irvine32 assembly: Snake and Tic-Tac-Toe (vs computer).
+- Insert Game command that drops a complete game into the current file.
+
+Fixed
+- Re-running now closes the previous program first, so the build no longer fails when the executable is still open.
+
 ### 1.1.0 (2026-07-27)
 
 Added
